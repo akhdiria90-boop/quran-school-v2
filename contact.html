@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>اتصل بنا | المدرسة القرآنية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --deep-green: #0b3b1e; --royal-green: #135c32; --gold: #c9a84c;
+            --gold-bright: #e0c97f; --gold-pale: #f2e6c9; --sand: #f5ead0;
+            --terracotta: #c17a3e; --cream: #fcf9f2; --text-dark: #1a2e1a; --text-muted: #4a5b4a;
+            --radius-xl: 1.8rem; --radius-lg: 1.3rem; --shadow-gold: 0 20px 40px rgba(201, 168, 76, 0.2);
+        }
+        body {
+            font-family: 'Cairo', sans-serif; background: linear-gradient(180deg, #fdf9f0 0%, #f5ead0 100%);
+            color: var(--text-dark); padding-bottom: 30px; background-attachment: fixed;
+        }
+        .navbar {
+            position: fixed; top: 15px; left: 50%; transform: translateX(-50%);
+            width: 95%; max-width: 700px; background: rgba(10, 30, 18, 0.85);
+            backdrop-filter: blur(25px); border: 1px solid rgba(201, 168, 76, 0.6);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4); border-radius: 60px;
+            padding: 10px 18px; display: flex; justify-content: space-between;
+            align-items: center; z-index: 999; overflow-x: auto; white-space: nowrap;
+        }
+        .navbar .brand { font-size: 1.1rem; font-weight: 800; color: var(--gold-bright); display: flex; align-items: center; gap: 6px; }
+        .navbar .brand i { font-size: 1.5rem; color: var(--gold); }
+        .nav-links a {
+            color: #fff; background: rgba(255,255,255,0.12); padding: 9px 14px; border-radius: 30px;
+            font-size: 0.85rem; margin: 0 2px; text-decoration: none; transition: 0.3s;
+        }
+        .nav-links a:hover { background: var(--gold); color: #0a2a0a; }
+
+        .contact-wrapper { margin-top: 130px; padding: 0 15px; }
+        .contact-container {
+            max-width: 600px; margin: 0 auto 30px;
+            background: rgba(255,255,255,0.8); backdrop-filter: blur(25px);
+            border-radius: var(--radius-xl); padding: 30px 20px;
+            box-shadow: var(--shadow-gold); border: 1px solid rgba(255,255,255,0.6);
+        }
+        h1 { color: var(--deep-green); font-size: 2rem; font-weight: 900; text-align: center; margin-bottom: 30px; }
+
+        .contact-card {
+            background: rgba(255,255,255,0.7); backdrop-filter: blur(10px);
+            border-radius: var(--radius-lg); padding: 25px; margin-bottom: 20px;
+            border: 1px solid var(--gold-pale); display: flex; align-items: center; gap: 15px;
+        }
+        .contact-card i { font-size: 2rem; color: var(--gold); min-width: 40px; text-align: center; }
+        .contact-card div { flex: 1; }
+        .contact-card h3 { color: var(--deep-green); margin-bottom: 5px; }
+        .contact-card p { color: var(--text-muted); }
+
+        .back-link { display: block; text-align: center; margin-top: 25px; color: var(--royal-green); text-decoration: none; font-weight: 700; }
+        .global-footer { text-align: center; padding: 20px; background: var(--deep-green); color: #ddd; margin-top: 40px; border-top: 3px solid var(--gold); border-radius: 30px 30px 0 0; font-size: 0.85rem; }
+    </style>
+</head>
+<body>
+    <div class="page-content">
+        <nav class="navbar">
+            <div class="brand"><i class="fas fa-mosque"></i> المدرسة القرآنية</div>
+            <div class="nav-links">
+                <a href="index.html"><i class="fas fa-home"></i> الرئيسية</a>
+                <a href="login.html"><i class="fas fa-sign-in-alt"></i> دخول</a>
+                <a href="visitor.html"><i class="fas fa-bullhorn"></i> أنشطة</a>
+                <a href="about.html"><i class="fas fa-info-circle"></i> عنا</a>
+            </div>
+        </nav>
+
+        <div class="contact-wrapper">
+            <div class="contact-container">
+                <h1>📞 اتصل بنا</h1>
+
+                <div class="contact-card">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div><h3>العنوان</h3><p>قصر توكي، بلدية دلدول، ولاية تيميمون</p></div>
+                </div>
+
+                <div class="contact-card">
+                    <i class="fas fa-phone"></i>
+                    <div><h3>الهاتف</h3><p>0XX XX XX XX XX</p></div>
+                </div>
+
+                <div class="contact-card">
+                    <i class="fab fa-whatsapp"></i>
+                    <div><h3>واتساب</h3><p>0XX XX XX XX XX</p></div>
+                </div>
+
+                <div class="contact-card">
+                    <i class="fas fa-envelope"></i>
+                    <div><h3>البريد الإلكتروني</h3><p>info@quran-school.dz</p></div>
+                </div>
+
+                <div class="contact-card">
+                    <i class="fas fa-clock"></i>
+                    <div><h3>أوقات الحلقات</h3><p>☀️ 08:00 - 10:00 | 🌙 16:00 - 18:00 | 🎙️ 18:30 - 19:30</p></div>
+                </div>
+
+                <a href="index.html" class="back-link">⬅ العودة للرئيسية</a>
+            </div>
+        </div>
+        <div class="global-footer">
+            <p><i class="fas fa-quran" style="color:var(--gold);"></i> المدرسة القرآنية - مسجد السلام</p>
+            <p>© 2026 | وقفة رقمية لخدمة كتاب الله</p>
+        </div>
+    </div>
+</body>
+</html>

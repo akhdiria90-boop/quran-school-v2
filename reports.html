@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>كشف النقاط | المدرسة القرآنية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --deep-green: #0b3b1e; --royal-green: #135c32; --gold: #c9a84c; --gold-pale: #f2e6c9; --sand: #f5ead0; --terracotta: #c17a3e; --cream: #fcf9f2; --text-dark: #1a2e1a; --text-muted: #4a5b4a; --radius-lg: 1.3rem; --shadow-gold: 0 20px 40px rgba(201, 168, 76, 0.2); }
+        body { font-family: 'Cairo', sans-serif; background: linear-gradient(180deg, #fdf9f0 0%, #f5ead0 100%); color: var(--text-dark); padding: 20px; max-width: 700px; margin: auto; }
+        h1 { color: var(--deep-green); text-align: center; margin-bottom: 25px; font-size: 2rem; }
+        .table-card { background: rgba(255,255,255,0.8); backdrop-filter: blur(25px); border-radius: var(--radius-lg); padding: 25px; margin-bottom: 25px; box-shadow: var(--shadow-gold); border: 1px solid rgba(255,255,255,0.6); overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        th { background: var(--deep-green); color: white; padding: 12px 8px; }
+        td { padding: 10px 8px; border-bottom: 1px solid #eee; text-align: center; }
+        .btn-primary { background: var(--royal-green); color: white; border: none; padding: 14px; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer; width: 100%; font-family: 'Cairo', sans-serif; margin-top: 15px; }
+        .btn-primary:hover { background: #0e4624; }
+        .back-link { display: block; text-align: center; margin-top: 25px; color: var(--royal-green); text-decoration: none; font-weight: 700; }
+    </style>
+</head>
+<body>
+    <h1>📋 كشف النقاط العام</h1>
+    <div class="table-card" id="reportContent"><p style="color:#999; text-align:center;">جاري تحميل البيانات...</p></div>
+    <button class="btn-primary" onclick="window.print()">🖨️ طباعة كشف النقاط</button>
+    <a href="admin.html" class="back-link">⬅ العودة للوحة التحكم</a>
+    <script>
+        const STORAGE_KEY = 'studentGrades';
+        function loadGrades() { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+        function renderReport() {
+            const grades = loadGrades();
+            const container = document.getElementById('reportContent');
+            if (!grades.length) { container.innerHTML = '<p style="color:#999; text-align:center;">لا توجد علامات بعد.</p>'; return; }
+            const averages = {}; const counts = {};
+            grades.forEach(g => { if (!averages[g.student]) { averages[g.student] = 0; counts[g.student] = 0; } averages[g.student] += g.total; counts[g.student]++; });
+            const students = Object.keys(averages);
+            const latestGrades = {};
+            grades.forEach(g => { latestGrades[g.student] = g; });
+            let html = `<table><thead><tr><th>الطالب</th><th>الحفظ</th><th>التجويد</th><th>المراجعة</th><th>المجموع</th><th>المعدل</th><th>التقدير</th></tr></thead><tbody>`;
+            students.forEach(name => {
+                const g = latestGrades[name];
+                const avg = (averages[name] / counts[name]).toFixed(1);
+                let appreciation = 'مقبول'; if (avg >= 50) appreciation = 'جيد'; if (avg >= 55) appreciation = 'جيد جداً'; if (avg >= 58) appreciation = 'ممتاز';
+                html += `<tr><td>${name}</td><td>${g.hifz}</td><td>${g.tajweed}</td><td>${g.murajaa}</td><td><strong>${g.total} / 60</strong></td><td>${avg}%</td><td>${appreciation}</td></tr>`;
+            });
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+        renderReport();
+    </script>
+</body>
+</html>

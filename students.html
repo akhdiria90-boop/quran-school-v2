@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>إدارة الطلاب | المدرسة القرآنية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --deep-green: #0b3b1e; --royal-green: #135c32; --gold: #c9a84c; --gold-pale: #f2e6c9; --sand: #f5ead0; --terracotta: #c17a3e; --cream: #fcf9f2; --text-dark: #1a2e1a; --text-muted: #4a5b4a; --radius-lg: 1.3rem; --shadow-gold: 0 20px 40px rgba(201, 168, 76, 0.2); }
+        body { font-family: 'Cairo', sans-serif; background: linear-gradient(180deg, #fdf9f0 0%, #f5ead0 100%); color: var(--text-dark); padding: 20px; max-width: 900px; margin: auto; background-attachment: fixed; }
+        h1 { color: var(--deep-green); text-align: center; margin-bottom: 25px; font-size: 2rem; }
+        .section { background: rgba(255,255,255,0.8); backdrop-filter: blur(25px); border-radius: var(--radius-lg); padding: 25px; box-shadow: var(--shadow-gold); border: 1px solid rgba(255,255,255,0.6); margin-bottom: 25px; }
+        .section h2 { color: var(--deep-green); margin-bottom: 20px; font-size: 1.4rem; border-bottom: 2px solid var(--gold-pale); padding-bottom: 10px; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; color: var(--royal-green); }
+        input, select, textarea { width: 100%; padding: 12px; margin: 8px 0 15px; border-radius: 10px; border: 1px solid #ccc; font-family: 'Cairo', sans-serif; }
+        .btn { background: var(--royal-green); color: white; border: none; padding: 14px; border-radius: 12px; font-weight: 700; cursor: pointer; width: 100%; font-family: 'Cairo', sans-serif; font-size: 1rem; margin-bottom: 10px; }
+        .btn:hover { background: #0e4624; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.85rem; background: white; border-radius: 15px; overflow: hidden; }
+        th { background: var(--deep-green); color: white; padding: 12px; text-align: center; }
+        td { padding: 10px; border-bottom: 1px solid #eee; text-align: center; }
+        .btn-edit { background: var(--gold); color: #0a2a0a; border: none; padding: 6px 14px; border-radius: 15px; cursor: pointer; font-weight: 600; }
+        .btn-delete { background: #c0392b; color: white; border: none; padding: 6px 14px; border-radius: 15px; cursor: pointer; font-weight: 600; margin-right: 5px; }
+        .back-link { display: block; text-align: center; margin-top: 25px; color: var(--royal-green); text-decoration: none; font-weight: 700; }
+    </style>
+</head>
+<body>
+    <h1>📋 إدارة الطلاب</h1>
+    <div class="section">
+        <h2 id="formTitle">➕ تسجيل طالب جديد</h2>
+        <input type="hidden" id="editIndex" value="-1"><input type="hidden" id="editHalaqaKey" value="">
+        <label>اللقب:</label><input type="text" id="surname" placeholder="اللقب">
+        <label>الاسم:</label><input type="text" id="name" placeholder="الاسم الشخصي">
+        <label>العمر:</label><input type="number" id="age" placeholder="العمر">
+        <label>الجنس:</label><select id="gender"><option value="">اختر</option><option value="ذكر">ذكر</option><option value="أنثى">أنثى</option></select>
+        <label>السنة الدراسية:</label><select id="year"><option>السنة الأولى</option><option>السنة الثانية</option><option>السنة الثالثة</option><option>السنة الرابعة</option><option>السنة الخامسة</option></select>
+        <label>اسم ولي الأمر:</label><input type="text" id="parentName" placeholder="اسم الأب أو الولي">
+        <label>رقم الهاتف:</label><input type="tel" id="phone" placeholder="07XX XX XX XX">
+        <label>الحلقة:</label><select id="halaqaSelect"><option value="morningProgress">☀️ الصباح</option><option value="eveningProgress">🌙 المساء</option><option value="tajweedProgress">🎙️ التسميع</option></select>
+        <label>ملاحظات:</label><textarea id="notes" rows="2" placeholder="ملاحظات إضافية..."></textarea>
+        <button class="btn" onclick="saveStudent()"><span id="submitBtnText">تسجيل الطالب</span></button>
+        <button class="btn" id="cancelEditBtn" onclick="cancelEdit()" style="display:none; background: #888;">إلغاء التعديل</button>
+        <p id="formMsg" style="color:green; margin-top:10px; font-weight:600;"></p>
+    </div>
+    <div class="section">
+        <h2>📋 قائمة الطلاب المسجلين</h2>
+        <div style="overflow-x: auto;">
+            <table id="studentsTable">
+                <thead><tr><th>اللقب</th><th>الاسم</th><th>العمر</th><th>الجنس</th><th>السنة</th><th>ولي الأمر</th><th>الهاتف</th><th>الحلقة</th><th>إجراءات</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+    <a href="admin.html" class="back-link">⬅ العودة للوحة المدير</a>
+    <script>
+        const KEYS = { morning: 'morningProgress', evening: 'eveningProgress', tajweed: 'tajweedProgress' };
+        let allStudentsData = [];
+        function loadAllStudents() {
+            allStudentsData = [];
+            for (let key in KEYS) {
+                const students = JSON.parse(localStorage.getItem(KEYS[key])) || [];
+                students.forEach(s => allStudentsData.push({...s, halaqaKey: KEYS[key], halaqaName: key === 'morning' ? '☀️ الصباح' : key === 'evening' ? '🌙 المساء' : '🎙️ التسميع'}));
+            }
+            const tbody = document.querySelector('#studentsTable tbody');
+            tbody.innerHTML = '';
+            allStudentsData.forEach((student, index) => {
+                const row = tbody.insertRow();
+                row.innerHTML = `<td>${student.surname || '-'}</td><td>${student.name || '-'}</td><td>${student.age || '-'}</td><td>${student.gender || '-'}</td><td>${student.year || '-'}</td><td>${student.parentName || '-'}</td><td>${student.phone || '-'}</td><td>${student.halaqaName}</td><td><button class="btn-edit" onclick="editStudent(${index})"><i class="fas fa-pen"></i></button> <button class="btn-delete" onclick="deleteStudent(${index})"><i class="fas fa-trash"></i></button></td>`;
+            });
+        }
+        function editStudent(index) {
+            const s = allStudentsData[index];
+            document.getElementById('editIndex').value = index;
+            document.getElementById('editHalaqaKey').value = s.halaqaKey;
+            document.getElementById('surname').value = s.surname || '';
+            document.getElementById('name').value = s.name || '';
+            document.getElementById('age').value = s.age || '';
+            document.getElementById('gender').value = s.gender || '';
+            document.getElementById('year').value = s.year || 'السنة الأولى';
+            document.getElementById('parentName').value = s.parentName || '';
+            document.getElementById('phone').value = s.phone || '';
+            document.getElementById('halaqaSelect').value = s.halaqaKey;
+            document.getElementById('notes').value = s.notes || '';
+            document.getElementById('formTitle').innerHTML = '✏️ تعديل بيانات الطالب';
+            document.getElementById('submitBtnText').innerText = 'حفظ التعديلات';
+            document.getElementById('cancelEditBtn').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        function cancelEdit() {
+            document.getElementById('editIndex').value = '-1';
+            document.getElementById('editHalaqaKey').value = '';
+            document.getElementById('surname').value = ''; document.getElementById('name').value = ''; document.getElementById('age').value = '';
+            document.getElementById('gender').value = ''; document.getElementById('year').value = 'السنة الأولى';
+            document.getElementById('parentName').value = ''; document.getElementById('phone').value = '';
+            document.getElementById('halaqaSelect').value = 'morningProgress'; document.getElementById('notes').value = '';
+            document.getElementById('formTitle').innerHTML = '➕ تسجيل طالب جديد';
+            document.getElementById('submitBtnText').innerText = 'تسجيل الطالب';
+            document.getElementById('cancelEditBtn').style.display = 'none';
+        }
+        function saveStudent() {
+            const index = parseInt(document.getElementById('editIndex').value);
+            const surname = document.getElementById('surname').value.trim();
+            const name = document.getElementById('name').value.trim();
+            const age = document.getElementById('age').value.trim();
+            const gender = document.getElementById('gender').value;
+            const year = document.getElementById('year').value;
+            const parentName = document.getElementById('parentName').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const halaqaKey = document.getElementById('halaqaSelect').value;
+            const notes = document.getElementById('notes').value.trim();
+            if (!surname || !name || !age) { document.getElementById('formMsg').innerText = '⚠️ اللقب والاسم والعمر مطلوبة.'; return; }
+            const studentData = { surname, name, age, gender, year, parentName, phone, notes, progress: 0 };
+            if (index >= 0) {
+                const oldKey = document.getElementById('editHalaqaKey').value;
+                const oldList = JSON.parse(localStorage.getItem(oldKey)) || [];
+                const updatedOld = oldList.filter((s, i) => i !== index);
+                localStorage.setItem(oldKey, JSON.stringify(updatedOld));
+                const newList = JSON.parse(localStorage.getItem(halaqaKey)) || [];
+                newList.push(studentData);
+                localStorage.setItem(halaqaKey, JSON.stringify(newList));
+                document.getElementById('formMsg').innerText = '✅ تم تعديل بيانات الطالب!';
+                cancelEdit();
+            } else {
+                const students = JSON.parse(localStorage.getItem(halaqaKey)) || [];
+                students.push(studentData);
+                localStorage.setItem(halaqaKey, JSON.stringify(students));
+                document.getElementById('formMsg').innerText = '✅ تم تسجيل الطالب بنجاح!';
+            }
+            loadAllStudents();
+        }
+        function deleteStudent(index) {
+            const s = allStudentsData[index];
+            if (!confirm(`حذف ${s.surname} ${s.name}؟`)) return;
+            const list = JSON.parse(localStorage.getItem(s.halaqaKey)) || [];
+            const updated = list.filter((_, i) => i !== index);
+            localStorage.setItem(s.halaqaKey, JSON.stringify(updated));
+            loadAllStudents();
+        }
+        loadAllStudents();
+    </script>
+</body>
+</html>

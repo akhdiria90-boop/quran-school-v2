@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>تسجيل الدخول | المدرسة القرآنية</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --deep-green: #0b3b1e; --royal-green: #135c32; --gold: #c9a84c;
+            --gold-bright: #e0c97f; --gold-pale: #f2e6c9; --sand: #f5ead0;
+            --terracotta: #c17a3e; --cream: #fcf9f2; --text-dark: #1a2e1a; --text-muted: #4a5b4a;
+            --radius-xl: 1.8rem; --radius-lg: 1.2rem;
+        }
+        body {
+            font-family: 'Cairo', sans-serif; background: linear-gradient(180deg, #fdf9f0 0%, #f5ead0 100%);
+            color: var(--text-dark); display: flex; align-items: center; justify-content: center;
+            min-height: 100vh; padding: 20px; background-attachment: fixed;
+        }
+        .navbar {
+            position: fixed; top: 15px; left: 50%; transform: translateX(-50%);
+            width: 95%; max-width: 500px; background: rgba(10, 30, 18, 0.85);
+            backdrop-filter: blur(25px); border: 1px solid rgba(201, 168, 76, 0.6);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4); border-radius: 60px;
+            padding: 10px 18px; display: flex; justify-content: space-between;
+            align-items: center; z-index: 999; overflow-x: auto; white-space: nowrap;
+        }
+        .navbar .brand { font-size: 1rem; font-weight: 800; color: var(--gold-bright); display: flex; align-items: center; gap: 5px; }
+        .navbar .brand i { font-size: 1.4rem; color: var(--gold); }
+        .nav-links a {
+            color: #fff; background: rgba(255,255,255,0.12); padding: 8px 12px; border-radius: 30px;
+            font-size: 0.85rem; margin: 0 2px; text-decoration: none; transition: 0.3s;
+        }
+        .nav-links a:hover { background: var(--gold); color: #0a2a0a; }
+
+        .auth-card {
+            background: rgba(255,255,255,0.8); backdrop-filter: blur(30px);
+            border-radius: var(--radius-xl); padding: 35px 25px; width: 100%; max-width: 480px;
+            box-shadow: 0 25px 50px rgba(201, 168, 76, 0.25); border: 1px solid rgba(255,255,255,0.6);
+            text-align: center; margin-top: 90px; transition: 0.4s ease; position: relative;
+        }
+
+        #welcome-screen h1 { color: var(--deep-green); font-size: 1.6rem; font-weight: 900; margin-bottom: 30px; }
+        .roles-list { display: flex; flex-direction: column; gap: 15px; }
+        .role-card {
+            background: rgba(255,255,255,0.7); border: 2px solid transparent;
+            border-radius: var(--radius-lg); padding: 15px 20px; cursor: pointer;
+            transition: all 0.3s ease; text-align: right; display: flex; align-items: center; gap: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.03);
+        }
+        .role-card:hover { border-color: var(--gold); background: white; transform: translateX(-5px); }
+        .role-card .role-icon { font-size: 2.5rem; min-width: 50px; text-align: center; }
+        .role-card .role-label { font-weight: 800; color: var(--deep-green); }
+        .role-card .role-desc { font-size: 0.8rem; color: var(--text-muted); }
+
+        .login-screen { display: none; animation: fadeSlide 0.4s ease; }
+        .login-screen.active { display: block; }
+        @keyframes fadeSlide { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .login-screen h2 { color: var(--deep-green); font-size: 1.5rem; margin-bottom: 25px; }
+        input, select {
+            width: 100%; padding: 16px; margin: 12px 0; border-radius: 14px;
+            border: 1px solid rgba(201,168,76,0.5); background: rgba(255,255,255,0.8);
+            font-family: 'Cairo', sans-serif; font-size: 1rem; text-align: right; outline: none;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #e0c97f, #b8933c); color: #0a2a0a; border: none;
+            padding: 16px; border-radius: 30px; font-weight: 800; font-size: 1rem;
+            width: 100%; cursor: pointer; margin-top: 15px; font-family: 'Cairo', sans-serif;
+        }
+        .btn-outline {
+            background: transparent; border: 2px solid var(--gold); color: var(--deep-green);
+            font-weight: 700; padding: 14px; border-radius: 30px; width: 100%; cursor: pointer; margin-top: 10px; font-family: 'Cairo', sans-serif;
+        }
+        .back-btn {
+            background: none; border: none; color: var(--text-muted); font-weight: 600;
+            margin-top: 20px; cursor: pointer; font-family: 'Cairo', sans-serif; font-size: 0.9rem;
+        }
+        .mini-footer { margin-top: 35px; text-align: center; color: var(--text-muted); font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+    <div class="page-content">
+        <nav class="navbar">
+            <div class="brand"><i class="fas fa-mosque"></i> المدرسة</div>
+            <div class="nav-links">
+                <a href="index.html"><i class="fas fa-home"></i> الرئيسية</a>
+                <a href="visitor.html"><i class="fas fa-bullhorn"></i> أنشطة</a>
+                <a href="about.html"><i class="fas fa-info-circle"></i> عنا</a>
+            </div>
+        </nav>
+
+        <div class="auth-card">
+            <div id="welcome-screen">
+                <h1><i class="fas fa-hand-peace"></i> السلام عليكم،<br>كيف تريد تسجيل الدخول؟</h1>
+                <div class="roles-list">
+                    <div class="role-card" onclick="showLogin('ولي')">
+                        <div class="role-icon">👨‍👩‍👧</div>
+                        <div><div class="role-label">ولي الأمر</div><div class="role-desc">متابعة الأبناء</div></div>
+                    </div>
+                    <div class="role-card" onclick="goToVisitor()">
+                        <div class="role-icon">👀</div>
+                        <div><div class="role-label">الزائر</div><div class="role-desc">تصفح الأنشطة</div></div>
+                    </div>
+                    <div class="role-card" onclick="showLogin('أستاذ')">
+                        <div class="role-icon">📖</div>
+                        <div><div class="role-label">الأستاذ</div><div class="role-desc">إدارة الحلقات</div></div>
+                    </div>
+                    <div class="role-card" onclick="showLogin('مدير')">
+                        <div class="role-icon">🏫</div>
+                        <div><div class="role-label">المدير</div><div class="role-desc">لوحة التحكم</div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="login-screen" id="login-screen">
+                <h2 id="loginTitle">تسجيل الدخول</h2>
+                <input type="text" id="username" placeholder="👤 اسم المستخدم">
+                <input type="password" id="password" placeholder="🔒 كلمة المرور">
+                <button class="btn-primary" onclick="login()">دخول</button>
+                <button class="btn-outline" id="registerLinkBtn" style="display:none;" onclick="showInterview()">إنشاء حساب جديد</button>
+                <p id="registrationClosedMsg" style="color: #e67e22; font-weight: 600; margin-top: 10px; display: none;">⛔ التسجيل مغلق حاليًا.</p>
+                <button class="btn-outline" onclick="forgotPassword()" style="margin-top: 10px;">🔑 نسيت كلمة المرور</button>
+                <button class="back-btn" onclick="goBack()">⬅ العودة إلى القائمة</button>
+                <p id="loginMsg" style="margin-top:10px; font-weight:600;"></p>
+            </div>
+
+            <div id="interview-screen" style="display:none;">
+                <h2 style="color: var(--deep-green); text-align: center; margin-bottom: 20px;">📝 تسجيل ولي الأمر</h2>
+                <div class="step-indicator" style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px;">
+                    <span class="step-dot active" id="s1"></span>
+                    <span class="step-dot" id="s2"></span>
+                    <span class="step-dot" id="s3"></span>
+                    <span class="step-dot" id="s4"></span>
+                    <span class="step-dot" id="s5"></span>
+                </div>
+                <div id="step1" class="interview-step active">
+                    <p class="question">1️⃣ ما اسمك الكريم؟</p>
+                    <input type="text" id="intSurname" placeholder="اللقب">
+                    <input type="text" id="intName" placeholder="الاسم">
+                    <button class="btn-primary" onclick="nextStep(2)">التالي ➡</button>
+                </div>
+                <div id="step2" class="interview-step" style="display:none;">
+                    <p class="question">2️⃣ ما رقم هاتفك؟</p>
+                    <input type="tel" id="intPhone" placeholder="07XX XX XX XX">
+                    <button class="btn-outline" onclick="nextStep(1)">⬅ السابق</button>
+                    <button class="btn-primary" onclick="nextStep(3)">التالي ➡</button>
+                </div>
+                <div id="step3" class="interview-step" style="display:none;">
+                    <p class="question">3️⃣ ما عنوانك؟</p>
+                    <input type="text" id="intAddress" placeholder="العنوان الكامل (اختياري)">
+                    <button class="btn-outline" onclick="nextStep(2)">⬅ السابق</button>
+                    <button class="btn-primary" onclick="nextStep(4)">التالي ➡</button>
+                </div>
+                <div id="step4" class="interview-step" style="display:none;">
+                    <p class="question">4️⃣ أضف بيانات الابن</p>
+                    <input type="text" id="chSurname" placeholder="اللقب *">
+                    <input type="text" id="chName" placeholder="الاسم *">
+                    <input type="number" id="chAge" placeholder="العمر *">
+                    <select id="chGender"><option value="">الجنس</option><option value="ذكر">ذكر</option><option value="أنثى">أنثى</option></select>
+                    <select id="chLevel"><option value="">المستوى</option><option value="تحضيري">تحضيري</option><option value="ابتدائي">ابتدائي</option><option value="متوسط">متوسط</option><option value="ثانوي">ثانوي</option></select>
+                    <select id="chHalaqa"><option value="morningProgress">☀️ صباح</option><option value="eveningProgress">🌙 مساء</option><option value="tajweedProgress">🎙️ تسميع</option></select>
+                    <button class="btn-primary" onclick="addChild()">➕ تسجيل الابن</button>
+                    <div id="addedChildrenList" style="margin: 15px 0;"></div>
+                    <button class="btn-outline" onclick="nextStep(5)">✅ اكتفيت، راجع معلوماتي</button>
+                    <button class="btn-outline" onclick="nextStep(3)">⬅ السابق</button>
+                </div>
+                <div id="step5" class="interview-step" style="display:none;">
+                    <p class="question">5️⃣ راجع معلوماتك</p>
+                    <div id="finalReview"></div>
+                    <button class="btn-primary" onclick="submitRegistration()">📝 تقديم الطلب وطباعة الاستمارة</button>
+                    <button class="btn-outline" onclick="nextStep(4)">⬅ العودة لإضافة ابن آخر</button>
+                </div>
+                <button class="btn-outline" onclick="goBack()" style="margin-top: 20px;">⬅ العودة للقائمة</button>
+            </div>
+        </div>
+        <div class="mini-footer">🕌 المدرسة القرآنية - مسجد السلام © 2026</div>
+    </div>
+
+    <script>
+        let selectedRole = '';
+        let childrenList = [];
+
+        function showLogin(role) {
+            selectedRole = role;
+            document.getElementById('welcome-screen').style.display = 'none';
+            document.getElementById('interview-screen').style.display = 'none';
+            document.getElementById('login-screen').classList.add('active');
+            document.getElementById('loginTitle').innerText = 'تسجيل الدخول - ' + role;
+            const registerBtn = document.getElementById('registerLinkBtn');
+            if (role === 'ولي') {
+                const isOpen = localStorage.getItem('registrationOpen');
+                const isRegistrationOpen = isOpen === null ? true : JSON.parse(isOpen);
+                registerBtn.style.display = isRegistrationOpen ? 'block' : 'none';
+                document.getElementById('registrationClosedMsg').style.display = isRegistrationOpen ? 'none' : 'block';
+            } else {
+                registerBtn.style.display = 'none';
+                document.getElementById('registrationClosedMsg').style.display = 'none';
+            }
+        }
+
+        function goToVisitor() { window.location.href = 'visitor.html'; }
+
+        function showInterview() {
+            document.getElementById('login-screen').classList.remove('active');
+            document.getElementById('interview-screen').style.display = 'block';
+            childrenList = [];
+            document.getElementById('addedChildrenList').innerHTML = '';
+            nextStep(1);
+        }
+
+        function goBack() {
+            document.getElementById('welcome-screen').style.display = 'block';
+            document.getElementById('login-screen').classList.remove('active');
+            document.getElementById('interview-screen').style.display = 'none';
+            selectedRole = '';
+        }
+
+        function login() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const msg = document.getElementById('loginMsg');
+            if (!username || !password) { msg.style.color = 'red'; msg.innerHTML = 'يرجى ملء جميع الحقول'; return; }
+            if (selectedRole === 'مدير') {
+                if (username === 'qasrtouki_admin' && password === '!MadrasaQuran2025@') {
+                    localStorage.setItem('currentUser', JSON.stringify({ surname: 'مدير', name: 'النظام', username, role: 'مدير' }));
+                    window.location.href = 'admin.html';
+                } else { msg.style.color = 'red'; msg.innerHTML = 'بيانات المدير غير صحيحة'; }
+            } else {
+                const users = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+                const found = users.find(u => u.username === username && u.password === password && u.role === selectedRole);
+                if (found) {
+                    localStorage.setItem('currentUser', JSON.stringify(found));
+                    window.location.href = selectedRole === 'أستاذ' ? 'teacher.html' : 'parent.html';
+                } else { msg.style.color = 'red'; msg.innerHTML = 'بيانات غير صحيحة أو لم يتم قبولك بعد'; }
+            }
+        }
+
+        function forgotPassword() { alert('🔐 يرجى التواصل مع مدير المدرسة لاستعادة كلمة المرور.'); }
+
+        function nextStep(step) {
+            document.querySelectorAll('.interview-step').forEach(s => s.style.display = 'none');
+            document.getElementById('step' + step).style.display = 'block';
+            document.querySelectorAll('.step-dot').forEach(d => d.classList.remove('active'));
+            for (let i = 1; i <= step; i++) document.getElementById('s' + i).classList.add('active');
+            if (step === 5) reviewData();
+        }
+
+        function addChild() {
+            const surname = document.getElementById('chSurname').value.trim();
+            const name = document.getElementById('chName').value.trim();
+            const age = document.getElementById('chAge').value.trim();
+            const gender = document.getElementById('chGender').value;
+            const level = document.getElementById('chLevel').value;
+            const halaqa = document.getElementById('chHalaqa').value;
+            if (!surname || !name || !age || !gender || !level) { alert('املأ جميع بيانات الابن'); return; }
+            childrenList.push({ surname, name, age, gender, level, halaqa });
+            document.getElementById('chSurname').value = '';
+            document.getElementById('chName').value = '';
+            document.getElementById('chAge').value = '';
+            document.getElementById('chGender').value = '';
+            document.getElementById('chLevel').value = '';
+            document.getElementById('chHalaqa').value = '';
+            let listHtml = '<strong>✅ الأبناء المُضافون (' + childrenList.length + ')</strong><br>';
+            childrenList.forEach((c, i) => {
+                listHtml += `${i+1}. ${c.surname} ${c.name} (${c.age} سنة, ${c.gender}, ${c.level})<br>`;
+            });
+            document.getElementById('addedChildrenList').innerHTML = listHtml;
+        }
+
+        function reviewData() {
+            const surname = document.getElementById('intSurname').value.trim();
+            const name = document.getElementById('intName').value.trim();
+            const phone = document.getElementById('intPhone').value.trim();
+            const address = document.getElementById('intAddress').value.trim();
+            let html = `<p><strong>ولي الأمر:</strong> ${surname} ${name}</p>`;
+            html += `<p><strong>الهاتف:</strong> ${phone}</p>`;
+            html += `<p><strong>العنوان:</strong> ${address || '-'}</p>`;
+            html += `<p><strong>الأبناء (${childrenList.length}):</strong></p>`;
+            childrenList.forEach(c => html += `<p>👦 ${c.surname} ${c.name} (${c.age} سنة, ${c.gender}, ${c.level})</p>`);
+            document.getElementById('finalReview').innerHTML = html;
+        }
+
+        function submitRegistration() {
+            const surname = document.getElementById('intSurname').value.trim();
+            const name = document.getElementById('intName').value.trim();
+            const phone = document.getElementById('intPhone').value.trim();
+            const address = document.getElementById('intAddress').value.trim();
+            if (!surname || !name || !phone) { alert('املأ بيانات ولي الأمر أولاً'); return; }
+            if (childrenList.length === 0) { alert('أضف ابنًا واحدًا على الأقل'); return; }
+            const username = surname.toLowerCase().replace(/\s/g, '') + '_' + name.toLowerCase().replace(/\s/g, '');
+            const password = Math.random().toString(36).substring(2, 10) + 'Qr!';
+            const requests = JSON.parse(localStorage.getItem('registrationRequests')) || [];
+            requests.push({ surname, name, phone, email: '', password, username, role: 'ولي', type: 'platform', date: new Date().toLocaleDateString('ar-DZ') });
+            childrenList.forEach(c => {
+                requests.push({ surname: c.surname, name: c.name, age: c.age, gender: c.gender, year: c.level, parentName: surname+' '+name, phone, halaqa: c.halaqa, notes: '', type: 'parent_request', date: new Date().toLocaleDateString('ar-DZ') });
+            });
+            localStorage.setItem('registrationRequests', JSON.stringify(requests));
+            printForm(surname, name, phone, address, username, password);
+        }
+
+        function printForm(surname, name, phone, address, username, password) {
+            const today = new Date().toLocaleDateString('ar-DZ');
+            let rows = '';
+            childrenList.forEach(c => {
+                rows += `<tr><td>${c.surname} ${c.name}</td><td>${c.age}</td><td>${c.gender}</td><td>${c.level}</td><td>${c.halaqa === 'morningProgress' ? '☀️ صباح' : c.halaqa === 'eveningProgress' ? '🌙 مساء' : '🎙️ تسميع'}</td></tr>`;
+            });
+            const win = window.open('', '_blank', 'width=900,height=700');
+            win.document.write(`<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>استمارة تسجيل</title><style>@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap');body{font-family:'Cairo',sans-serif;text-align:right;padding:30px;max-width:800px;margin:auto;color:#1a2e1a;border:2px solid #c9a84c;border-radius:15px;}.header{text-align:center;border-bottom:2px solid #c9a84c;padding-bottom:15px;margin-bottom:20px;}.header h1{color:#0b3b1e;}.header h2{color:#8b5a2b;font-size:1.2rem;}table{width:100%;border-collapse:collapse;margin:20px 0;}th{background:#0b3b1e;color:white;padding:10px;}td{border-bottom:1px solid #ccc;padding:8px;text-align:center;}</style></head><body><div class="header"><h1>🕌 المدرسة القرآنية</h1><h2>مسجد السلام - قصر توكي</h2><p><strong>استمارة طلب تسجيل الأبناء</strong></p></div><p><strong>📅 التاريخ:</strong> ${today}</p><p><strong>👤 ولي الأمر:</strong> ${surname} ${name}</p><p><strong>📞 الهاتف:</strong> ${phone}</p><p><strong>🏠 العنوان:</strong> ${address || '-'}</p><p><strong>👥 عدد الأبناء:</strong> ${childrenList.length}</p><h3>📋 بيانات الأبناء</h3><table><thead><tr><th>الاسم الكامل</th><th>العمر</th><th>الجنس</th><th>المستوى</th><th>الحلقة</th></tr></thead><tbody>${rows}</tbody></table><p style="margin-top:30px;"><strong>🔑 اسم المستخدم:</strong> ${username}</p><p><strong>🔒 كلمة المرور:</strong> ${password}</p><div style="display:flex;justify-content:space-between;margin-top:40px;"><p>توقيع ولي الأمر: __________________</p><p>ختم وتوقيع المدرسة: __________________</p></div><script>window.onload=function(){window.print();}</` + `script></body></html>`);
+            win.document.close();
+        }
+    </script>
+</body>
+</html>

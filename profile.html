@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>ملفي الشخصي | المدرسة القرآنية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --deep-green: #0b3b1e; --royal-green: #135c32; --gold: #c9a84c;
+            --sand: #f5ead0; --cream: #fcf9f2; --text-dark: #1a2e1a;
+        }
+        body {
+            font-family: 'Cairo', sans-serif; background: linear-gradient(180deg, #fdf9f0 0%, #f5ead0 100%);
+            color: var(--text-dark); display: flex; align-items: center; justify-content: center;
+            min-height: 100vh; padding: 20px;
+        }
+        .profile-card {
+            background: rgba(255,255,255,0.85); backdrop-filter: blur(25px);
+            border-radius: 25px; padding: 35px 25px; max-width: 450px; width: 100%;
+            text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.15); border: 2px solid var(--gold);
+        }
+        h1 { color: var(--deep-green); font-size: 1.8rem; margin-bottom: 25px; }
+        label { display: block; margin-bottom: 5px; font-weight: 700; color: var(--deep-green); text-align: right; }
+        input {
+            width: 100%; padding: 14px; margin-bottom: 20px; border-radius: 12px;
+            border: 1px solid #ccc; font-family: 'Cairo', sans-serif; font-size: 1rem;
+            background: rgba(255,255,255,0.8);
+        }
+        .btn {
+            background: var(--deep-green); color: white; border: none; padding: 14px;
+            border-radius: 25px; font-weight: 700; font-size: 1rem; cursor: pointer;
+            width: 100%; font-family: 'Cairo', sans-serif; margin-bottom: 10px;
+        }
+        .btn:hover { background: var(--royal-green); }
+        #profileMsg { margin-top: 15px; font-weight: 600; }
+        .back-link { display: block; margin-top: 20px; color: var(--royal-green); text-decoration: none; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="profile-card">
+        <h1>👤 ملفي الشخصي</h1>
+        <label>اللقب:</label><input type="text" id="surname" placeholder="اللقب">
+        <label>الاسم:</label><input type="text" id="name" placeholder="الاسم">
+        <label>اسم المستخدم:</label><input type="text" id="username" placeholder="اسم المستخدم">
+        <label>كلمة مرور جديدة (اتركه فارغاً إن لم ترد تغييره):</label><input type="password" id="password" placeholder="كلمة مرور جديدة">
+        <button class="btn" onclick="saveProfile()">💾 حفظ التغييرات</button>
+        <button class="btn" onclick="window.print()" style="background: var(--gold); color:#0a2a0a;">🖨️ طباعة البطاقة</button>
+        <p id="profileMsg"></p>
+        <a href="admin.html" class="back-link">⬅ العودة للوحة التحكم</a>
+    </div>
+    <script>
+        function saveProfile() {
+            const data = {
+                surname: document.getElementById('surname').value.trim(),
+                name: document.getElementById('name').value.trim(),
+                username: document.getElementById('username').value.trim()
+            };
+            localStorage.setItem('adminProfile', JSON.stringify(data));
+            const pass = document.getElementById('password').value.trim();
+            if (pass) localStorage.setItem('adminPasswordHint', pass);
+            document.getElementById('profileMsg').style.color = 'var(--royal-green)';
+            document.getElementById('profileMsg').innerText = '✅ تم حفظ البيانات بنجاح.';
+        }
+        (function() {
+            const data = JSON.parse(localStorage.getItem('adminProfile')) || {};
+            document.getElementById('surname').value = data.surname || '';
+            document.getElementById('name').value = data.name || '';
+            document.getElementById('username').value = data.username || 'admin';
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>متابعة الأبناء | المدرسة القرآنية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --deep-green: #0b3b1e; --royal-green: #135c32; --gold: #c9a84c;
+            --gold-bright: #e0c97f; --gold-pale: #f2e6c9; --sand: #f5ead0;
+            --terracotta: #c17a3e; --cream: #fcf9f2; --text-dark: #1a2e1a; --text-muted: #4a5b4a;
+            --radius-xl: 1.8rem; --radius-lg: 1.3rem; --shadow-gold: 0 15px 30px rgba(201, 168, 76, 0.2);
+        }
+        body { font-family: 'Cairo', sans-serif; background: linear-gradient(180deg, #fdf9f0 0%, #f5ead0 100%); color: var(--text-dark); padding-bottom: 30px; background-attachment: fixed; }
+        .navbar {
+            position: fixed; top: 15px; left: 50%; transform: translateX(-50%);
+            width: 95%; max-width: 700px; background: rgba(10, 30, 18, 0.85);
+            backdrop-filter: blur(20px); border: 1px solid rgba(201, 168, 76, 0.5);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4); border-radius: 60px;
+            padding: 10px 18px; display: flex; justify-content: space-between;
+            align-items: center; z-index: 999; overflow-x: auto; white-space: nowrap;
+        }
+        .navbar .brand { font-size: 1.1rem; font-weight: 800; color: var(--gold-bright); display: flex; align-items: center; gap: 6px; }
+        .navbar .brand i { font-size: 1.5rem; color: var(--gold); }
+        .nav-links a {
+            color: #fff; background: rgba(255,255,255,0.12); padding: 9px 14px; border-radius: 30px;
+            font-size: 0.85rem; margin: 0 2px; text-decoration: none; transition: 0.3s;
+        }
+        .nav-links a:hover { background: var(--gold); color: #0a2a0a; }
+
+        .parent-wrapper { margin-top: 130px; padding: 0 15px; }
+        .parent-container {
+            max-width: 700px; margin: 0 auto 30px;
+            background: rgba(255,255,255,0.8); backdrop-filter: blur(25px);
+            border-radius: var(--radius-xl); padding: 30px 20px;
+            box-shadow: var(--shadow-gold); border: 1px solid rgba(255,255,255,0.6);
+        }
+        h1 { color: var(--deep-green); font-size: 2rem; font-weight: 900; text-align: center; margin-bottom: 5px; }
+        .subtitle { text-align: center; color: var(--royal-green); margin-bottom: 30px; }
+
+        .child-card {
+            background: rgba(255,255,255,0.7); backdrop-filter: blur(10px);
+            border-radius: var(--radius-lg); padding: 20px; margin-bottom: 20px;
+            border: 1px solid var(--gold-pale); border-right: 5px solid var(--gold);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.03);
+        }
+        .child-card h3 { color: var(--deep-green); margin-bottom: 10px; }
+        .progress-bg { background: #e0e0e0; border-radius: 10px; height: 10px; width: 100%; margin: 10px 0; }
+        .progress-fill { background: var(--royal-green); height: 10px; border-radius: 10px; }
+
+        .empty-state { text-align: center; padding: 40px; color: var(--text-muted); }
+        .back-link { display: block; text-align: center; margin-top: 20px; color: var(--royal-green); text-decoration: none; font-weight: 700; }
+    </style>
+</head>
+<body>
+    <div class="page-content">
+        <nav class="navbar">
+            <div class="brand"><i class="fas fa-mosque"></i> المدرسة القرآنية</div>
+            <div class="nav-links">
+                <a href="index.html"><i class="fas fa-home"></i> الرئيسية</a>
+                <a href="login.html"><i class="fas fa-sign-in-alt"></i> خروج</a>
+            </div>
+        </nav>
+
+        <div class="parent-wrapper">
+            <div class="parent-container">
+                <h1>👨‍👩‍👧 متابعة الأبناء</h1>
+                <p class="subtitle" id="parentNameDisplay">أهلاً بك ولي الأمر الفاضل <span id="demoBadge" style="display:none; background: var(--gold); color: #0a2a0a; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; margin-right: 10px;">وضع تجريبي</span></p>
+                <div id="childrenContainer">
+                    <div class="empty-state">⏳ جاري تحميل بيانات أبنائك...</div>
+                </div>
+                <a href="login.html" class="back-link">⬅ العودة لتسجيل الدخول</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========== وضع التجربة ==========
+        if (window.location.search.includes('demo=true')) {
+            document.getElementById('demoBadge').style.display = 'inline';
+            localStorage.setItem('currentUser', JSON.stringify({ surname: 'علي', name: 'محمد', username: 'ali', role: 'ولي' }));
+            localStorage.setItem('morningProgress', JSON.stringify([
+                { surname: 'أحمد', name: 'علي', age: '10', gender: 'ذكر', year: 'السنة الأولى', parentName: 'علي محمد', phone: '0770000001', progress: 75, repetitions: 12, notes: 'ممتاز في التجويد' },
+                { surname: 'فاطمة', name: 'علي', age: '8', gender: 'أنثى', year: 'تحضيري', parentName: 'علي محمد', phone: '0770000001', progress: 40, repetitions: 8, notes: 'تحتاج مراجعة' }
+            ]));
+        }
+
+        var currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (currentUser) {
+            document.getElementById('parentNameDisplay').innerHTML = 'أهلاً بك ' + (currentUser.name || currentUser.surname || 'ولي الأمر') + ' <span id="demoBadge" style="display:none; background: var(--gold); color: #0a2a0a; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; margin-right: 10px;">وضع تجريبي</span>';
+            if (window.location.search.includes('demo=true')) {
+                document.getElementById('demoBadge').style.display = 'inline';
+            }
+        }
+
+        function loadChildren() {
+            var allHalaqat = ['morningProgress', 'eveningProgress', 'tajweedProgress'];
+            var allChildren = [];
+            allHalaqat.forEach(function(key) {
+                var students = JSON.parse(localStorage.getItem(key)) || [];
+                students.forEach(function(s) {
+                    allChildren.push({
+                        ...s,
+                        halaqaName: key === 'morningProgress' ? '☀️ حلقة الصباح' : key === 'eveningProgress' ? '🌙 حلقة المساء' : '🎙️ حلقة التسميع'
+                    });
+                });
+            });
+
+            var container = document.getElementById('childrenContainer');
+            if (!allChildren.length) {
+                container.innerHTML = '<div class="empty-state"><p>لا يوجد أبناء مسجلون بعد.</p><p>يمكنك تسجيلهم من خلال صفحة الدخول.</p></div>';
+                return;
+            }
+
+            var html = '';
+            allChildren.forEach(function(child) {
+                var name = [child.surname, child.name].filter(Boolean).join(' ') || 'غير معروف';
+                var progress = child.progress || 0;
+                html += '<div class="child-card">';
+                html += '<h3>🧒 ' + name + '</h3>';
+                html += '<p>📖 الحلقة: ' + child.halaqaName + '</p>';
+                if (child.age) html += '<p>🎂 العمر: ' + child.age + ' سنة</p>';
+                html += '<p>📊 تقدم الحفظ:</p>';
+                html += '<div class="progress-bg"><div class="progress-fill" style="width:' + progress + '%;"></div></div>';
+                html += '<p style="font-size:0.9rem;">' + progress + '% من المنهج</p>';
+                html += '</div>';
+            });
+            container.innerHTML = html;
+        }
+
+        loadChildren();
+    </script>
+</body>
+</html>

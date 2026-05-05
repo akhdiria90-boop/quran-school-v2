@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>سجل العلامات | المدرسة القرآنية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --deep-green: #0b3b1e; --royal-green: #135c32; --gold: #c9a84c; --gold-pale: #f2e6c9; --sand: #f5ead0; --terracotta: #c17a3e; --cream: #fcf9f2; --text-dark: #1a2e1a; --text-muted: #4a5b4a; --radius-lg: 1.3rem; --shadow-gold: 0 20px 40px rgba(201, 168, 76, 0.2); }
+        body { font-family: 'Cairo', sans-serif; background: linear-gradient(180deg, #fdf9f0 0%, #f5ead0 100%); color: var(--text-dark); padding: 20px; max-width: 700px; margin: auto; }
+        h1 { color: var(--deep-green); text-align: center; margin-bottom: 25px; font-size: 2rem; }
+        .form-card { background: rgba(255,255,255,0.8); backdrop-filter: blur(25px); border-radius: var(--radius-lg); padding: 25px; margin-bottom: 25px; box-shadow: var(--shadow-gold); border: 1px solid rgba(255,255,255,0.6); }
+        .form-card h2 { color: var(--deep-green); margin-bottom: 20px; font-size: 1.3rem; border-bottom: 2px solid var(--gold-pale); padding-bottom: 10px; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; color: var(--royal-green); }
+        select, input { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 10px; border: 1px solid #ccc; font-family: 'Cairo', sans-serif; }
+        .grades-row { display: flex; gap: 10px; }
+        .btn-primary { background: var(--royal-green); color: white; border: none; padding: 14px; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer; width: 100%; font-family: 'Cairo', sans-serif; }
+        .btn-primary:hover { background: #0e4624; }
+        .record-card { background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); border-radius: var(--radius-lg); padding: 15px; margin-bottom: 10px; border-right: 4px solid var(--gold); }
+        .record-card p { margin: 4px 0; }
+        .back-link { display: block; text-align: center; margin-top: 25px; color: var(--royal-green); text-decoration: none; font-weight: 700; }
+    </style>
+</head>
+<body>
+    <h1>📊 سجل العلامات والتقييمات</h1>
+    <div class="form-card">
+        <h2>➕ إضافة علامة جديدة</h2>
+        <label>اختر الحلقة:</label>
+        <select id="halaqaSelect"><option value="morningProgress">☀️ الصباح</option><option value="eveningProgress">🌙 المساء</option><option value="tajweedProgress">🎙️ التسميع</option></select>
+        <label>اختر الطالب:</label>
+        <select id="studentSelect"><option value="">-- اختر طالباً --</option></select>
+        <div class="grades-row">
+            <div style="flex:1;"><label>الحفظ (20)</label><input type="number" id="hifzGrade" min="0" max="20" placeholder="0-20"></div>
+            <div style="flex:1;"><label>التجويد (20)</label><input type="number" id="tajweedGrade" min="0" max="20" placeholder="0-20"></div>
+            <div style="flex:1;"><label>المراجعة (20)</label><input type="number" id="murajaaGrade" min="0" max="20" placeholder="0-20"></div>
+        </div>
+        <button class="btn-primary" onclick="saveGrade()">💾 حفظ العلامة</button>
+    </div>
+    <div id="gradesList"></div>
+    <a href="admin.html" class="back-link">⬅ العودة للوحة التحكم</a>
+    <script>
+        const STORAGE_KEY = 'studentGrades';
+        function loadStudents(key) { return JSON.parse(localStorage.getItem(key)) || []; }
+        function loadGrades() { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+        function saveGrades(data) { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+        function populateStudents() {
+            const halaqa = document.getElementById('halaqaSelect').value;
+            const students = loadStudents(halaqa);
+            const select = document.getElementById('studentSelect');
+            select.innerHTML = '<option value="">-- اختر طالباً --</option>';
+            students.forEach(s => {
+                const name = [s.surname, s.name].filter(Boolean).join(' ') || 'غير معروف';
+                select.innerHTML += `<option value="${name}">${name}</option>`;
+            });
+        }
+        document.getElementById('halaqaSelect').addEventListener('change', populateStudents);
+        function saveGrade() {
+            const student = document.getElementById('studentSelect').value;
+            const hifz = document.getElementById('hifzGrade').value;
+            const tajweed = document.getElementById('tajweedGrade').value;
+            const murajaa = document.getElementById('murajaaGrade').value;
+            if (!student) return alert('اختر طالباً');
+            const grades = loadGrades();
+            grades.push({ student, hifz: parseInt(hifz)||0, tajweed: parseInt(tajweed)||0, murajaa: parseInt(murajaa)||0, total: (parseInt(hifz)||0)+(parseInt(tajweed)||0)+(parseInt(murajaa)||0), date: new Date().toLocaleDateString('ar-DZ') });
+            saveGrades(grades);
+            renderGrades();
+            document.getElementById('hifzGrade').value = ''; document.getElementById('tajweedGrade').value = ''; document.getElementById('murajaaGrade').value = '';
+            alert('✅ تم حفظ العلامة');
+        }
+        function renderGrades() {
+            const grades = loadGrades();
+            const container = document.getElementById('gradesList');
+            if (!grades.length) { container.innerHTML = '<p style="color:#999; margin-top:20px;">لا توجد علامات بعد.</p>'; return; }
+            let html = '<h2 style="margin-top:30px; color: var(--deep-green);">📋 العلامات المدخلة</h2>';
+            grades.forEach(g => {
+                html += `<div class="record-card"><p><strong>${g.student}</strong> | ${g.date}</p><p>📖 حفظ: ${g.hifz} | 🎙️ تجويد: ${g.tajweed} | 📚 مراجعة: ${g.murajaa}</p><p><strong>المجموع: ${g.total} / 60</strong></p></div>`;
+            });
+            container.innerHTML = html;
+        }
+        populateStudents();
+        renderGrades();
+    </script>
+</body>
+</html>

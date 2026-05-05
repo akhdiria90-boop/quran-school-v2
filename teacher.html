@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>لوحة الأستاذ | المدرسة القرآنية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --deep-green: #0b3b1e; --royal-green: #135c32; --gold: #c9a84c;
+            --gold-bright: #e0c97f; --gold-pale: #f2e6c9; --sand: #f5ead0;
+            --terracotta: #c17a3e; --cream: #fcf9f2; --text-dark: #1a2e1a; --text-muted: #4a5b4a;
+            --radius-xl: 1.8rem; --radius-lg: 1.3rem; --shadow-gold: 0 20px 40px rgba(201, 168, 76, 0.25);
+        }
+        body {
+            font-family: 'Cairo', sans-serif; background: linear-gradient(180deg, #fdf9f0 0%, #f5ead0 100%);
+            color: var(--text-dark); padding-bottom: 30px; background-attachment: fixed;
+        }
+        .navbar {
+            position: fixed; top: 15px; left: 50%; transform: translateX(-50%);
+            width: 95%; max-width: 700px; background: rgba(10, 30, 18, 0.85);
+            backdrop-filter: blur(25px); border: 1px solid rgba(201, 168, 76, 0.6);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4); border-radius: 60px;
+            padding: 10px 18px; display: flex; justify-content: space-between;
+            align-items: center; z-index: 999; overflow-x: auto; white-space: nowrap;
+        }
+        .navbar .brand { font-size: 1.1rem; font-weight: 800; color: var(--gold-bright); display: flex; align-items: center; gap: 6px; }
+        .navbar .brand i { font-size: 1.5rem; color: var(--gold); }
+        .nav-links a { color: #fff; background: rgba(255,255,255,0.12); padding: 9px 14px; border-radius: 30px; font-size: 0.85rem; margin: 0 2px; text-decoration: none; }
+        .nav-links a:hover { background: var(--gold); color: #0a2a0a; }
+
+        .teacher-wrapper { margin-top: 130px; padding: 0 15px; }
+        .teacher-container {
+            max-width: 800px; margin: 0 auto 30px;
+            background: rgba(255,255,255,0.8); backdrop-filter: blur(25px);
+            border-radius: var(--radius-xl); padding: 30px 20px;
+            box-shadow: var(--shadow-gold); border: 1px solid rgba(255,255,255,0.6);
+        }
+
+        .teacher-header {
+            display: flex; align-items: center; gap: 15px; margin-bottom: 30px;
+            background: linear-gradient(135deg, rgba(201,168,76,0.2), rgba(19,92,50,0.1));
+            border-radius: var(--radius-lg); padding: 20px; border: 1px solid var(--gold-pale);
+        }
+        .teacher-avatar { font-size: 3rem; }
+        .teacher-info h2 { color: var(--deep-green); }
+        .teacher-info p { color: var(--text-muted); }
+
+        .stats-mini { display: grid; grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .stat-mini {
+            background: rgba(255,255,255,0.7); backdrop-filter: blur(10px);
+            border-radius: 20px; padding: 20px 10px; text-align: center;
+            border-bottom: 4px solid var(--gold); box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+        .stat-mini .number { font-size: 2rem; font-weight: 900; color: var(--deep-green); }
+        .stat-mini .label { color: var(--text-muted); font-size: 0.85rem; font-weight: 600; }
+
+        .student-card {
+            background: rgba(255,255,255,0.7); backdrop-filter: blur(10px);
+            border-radius: var(--radius-lg); padding: 15px; margin-bottom: 15px;
+            border: 1px solid var(--gold-pale); transition: 0.3s;
+        }
+        .student-card:hover { background: white; box-shadow: 0 5px 15px rgba(0,0,0,0.03); }
+        .student-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+        .student-name { font-weight: 800; color: var(--deep-green); min-width: 100px; }
+        .actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        .btn-icon {
+            background: none; border: none; cursor: pointer; font-size: 1.6rem;
+            padding: 10px; border-radius: 15px; transition: 0.2s;
+        }
+        .btn-icon.present { color: var(--royal-green); }
+        .btn-icon.absent { color: #c0392b; }
+        .btn-save {
+            background: var(--gold); color: #0a2a0a; border: none; padding: 8px 15px;
+            border-radius: 15px; cursor: pointer; font-weight: 700; font-size: 0.9rem;
+            display: inline-flex; align-items: center; gap: 5px;
+        }
+        .progress-bg { background: #e0e0e0; border-radius: 10px; height: 10px; width: 100px; }
+        .progress-fill { background: var(--royal-green); height: 10px; border-radius: 10px; }
+        .note-input { width: 100px; padding: 6px; border-radius: 8px; border: 1px solid #ccc; font-family: 'Cairo', sans-serif; }
+
+        .btn-print {
+            background: var(--royal-green); color: white; border: none; padding: 14px 30px;
+            border-radius: 30px; font-weight: 700; cursor: pointer; width: 100%;
+            font-family: 'Cairo', sans-serif; font-size: 1rem; margin-top: 20px;
+        }
+        .back-link { display: block; text-align: center; margin-top: 20px; color: var(--royal-green); text-decoration: none; font-weight: 700; }
+    </style>
+</head>
+<body>
+    <div class="page-content">
+        <nav class="navbar">
+            <div class="brand"><i class="fas fa-mosque"></i> المدرسة القرآنية</div>
+            <div class="nav-links">
+                <a href="index.html"><i class="fas fa-home"></i> الرئيسية</a>
+                <a href="login.html"><i class="fas fa-sign-in-alt"></i> خروج</a>
+            </div>
+        </nav>
+
+        <div class="teacher-wrapper">
+            <div class="teacher-container">
+                <div class="teacher-header">
+                    <div class="teacher-avatar">🧔</div>
+                    <div class="teacher-info">
+                        <h2 id="teacherNameDisplay">أهلاً بك أستاذنا</h2>
+                        <p id="halaqaTitle">حلقة الصباح | ⏰ 08:00 - 10:00</p>
+                    </div>
+                    <span id="demoBadge" style="display:none; background: var(--gold); color: #0a2a0a; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; margin-right: auto;">وضع تجريبي</span>
+                </div>
+
+                <div class="stats-mini">
+                    <div class="stat-mini"><div class="number" id="statTotal">0</div><div class="label">👥 طلاب</div></div>
+                    <div class="stat-mini"><div class="number" id="statPresent">0</div><div class="label">✅ حاضر</div></div>
+                    <div class="stat-mini"><div class="number" id="statAbsent">0</div><div class="label">❌ غائب</div></div>
+                    <div class="stat-mini"><div class="number" id="statProgress">0%</div><div class="label">📊 تقدم</div></div>
+                </div>
+
+                <div id="studentsContainer">
+                    <p style="color:#999; text-align:center;">جاري تحميل الطلاب...</p>
+                </div>
+
+                <button class="btn-print" onclick="window.print()">🖨️ طباعة كشف الحلقة</button>
+                <a href="login.html" class="back-link">⬅ العودة لتسجيل الدخول</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========== وضع التجربة ==========
+        if (window.location.search.includes('demo=true')) {
+            document.getElementById('demoBadge').style.display = 'inline';
+            localStorage.setItem('currentUser', JSON.stringify({ surname: 'عمر', name: 'بن الخطاب', username: 'omar', role: 'أستاذ', assignedHalaqa: 'morningProgress' }));
+            localStorage.setItem('morningProgress', JSON.stringify([
+                { surname: 'أحمد', name: 'علي', age: '10', gender: 'ذكر', year: 'السنة الأولى', parentName: 'علي محمد', phone: '0770000001', progress: 75, repetitions: 12, notes: 'ممتاز في التجويد' },
+                { surname: 'فاطمة', name: 'حسن', age: '8', gender: 'أنثى', year: 'تحضيري', parentName: 'حسن عمر', phone: '0770000002', progress: 40, repetitions: 8, notes: 'تحتاج مراجعة' }
+            ]));
+        }
+
+        var currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        var assignedHalaqa = currentUser ? currentUser.assignedHalaqa : null;
+
+        if (currentUser) {
+            document.getElementById('teacherNameDisplay').innerText = 'أهلاً بك أستاذ ' + (currentUser.name || currentUser.surname || '');
+        }
+
+        const HALAQAT = {
+            morningProgress: { name: '☀️ حلقة الصباح', time: '08:00 - 10:00' },
+            eveningProgress: { name: '🌙 حلقة المساء', time: '16:00 - 18:00' },
+            tajweedProgress: { name: '🎙️ حلقة التسميع', time: '18:30 - 19:30' }
+        };
+
+        if (assignedHalaqa && HALAQAT[assignedHalaqa]) {
+            document.getElementById('halaqaTitle').innerText = HALAQAT[assignedHalaqa].name + ' | ⏰ ' + HALAQAT[assignedHalaqa].time;
+        }
+
+        function loadStudents() {
+            if (!assignedHalaqa) return;
+            var students = JSON.parse(localStorage.getItem(assignedHalaqa)) || [];
+            var container = document.getElementById('studentsContainer');
+            
+            if (!students.length) {
+                container.innerHTML = '<p style="color:#999; text-align:center;">لا يوجد طلاب في هذه الحلقة بعد.</p>';
+                updateStats([]);
+                return;
+            }
+
+            var today = new Date().toISOString().split('T')[0];
+            var html = '';
+            students.forEach(function(s, index) {
+                var name = [s.surname, s.name].filter(Boolean).join(' ') || 'غير معروف';
+                var phone = s.phone || s.parentPhone || '';
+                var progress = s.progress || 0;
+                var attendance = s.attendance || {};
+                var isPresent = attendance[today] === true;
+                var notes = s.notes || '';
+                var repetitions = s.repetitions || 0;
+
+                html += '<div class="student-card"><div class="student-row">';
+                html += '<div class="student-name">' + name + '</div>';
+                html += '<div class="actions">';
+                html += '<button class="btn-icon ' + (isPresent ? 'present' : 'absent') + '" onclick="toggleAttendance(' + index + ')">' + (isPresent ? '✅' : '❌') + '</button>';
+                html += '<div><div class="progress-bg"><div class="progress-fill" style="width:' + progress + '%;"></div></div><small>' + progress + '%</small></div>';
+                html += '<button class="btn-save" onclick="addProgress(' + index + ')"><i class="fas fa-star"></i> حفظ</button>';
+                html += '<button class="btn-save" onclick="addRepetition(' + index + ')"><i class="fas fa-redo"></i> تكرار <small id="rep_' + index + '">' + repetitions + '</small></button>';
+                html += '<input type="text" class="note-input" value="' + notes + '" onchange="updateNotes(' + index + ', this.value)" placeholder="ملاحظة">';
+                html += (phone ? '<button class="btn-icon" onclick="alert(\'📞 ' + phone + '\')"><i class="fas fa-phone-alt"></i></button>' : '');
+                html += '</div></div></div>';
+            });
+            container.innerHTML = html;
+            updateStats(students);
+        }
+
+        function toggleAttendance(index) {
+            var students = JSON.parse(localStorage.getItem(assignedHalaqa)) || [];
+            var today = new Date().toISOString().split('T')[0];
+            if (!students[index].attendance) students[index].attendance = {};
+            students[index].attendance[today] = !students[index].attendance[today];
+            localStorage.setItem(assignedHalaqa, JSON.stringify(students));
+            loadStudents();
+        }
+
+        function addProgress(index) {
+            var students = JSON.parse(localStorage.getItem(assignedHalaqa)) || [];
+            if (students[index].progress === undefined) students[index].progress = 0;
+            if (students[index].progress < 100) {
+                students[index].progress += 5;
+                localStorage.setItem(assignedHalaqa, JSON.stringify(students));
+                loadStudents();
+            } else alert('✅ أكمل الطالب الحفظ!');
+        }
+
+        function addRepetition(index) {
+            var students = JSON.parse(localStorage.getItem(assignedHalaqa)) || [];
+            if (!students[index].repetitions) students[index].repetitions = 0;
+            students[index].repetitions++;
+            localStorage.setItem(assignedHalaqa, JSON.stringify(students));
+            document.getElementById('rep_' + index).innerText = students[index].repetitions;
+        }
+
+        function updateNotes(index, value) {
+            var students = JSON.parse(localStorage.getItem(assignedHalaqa)) || [];
+            students[index].notes = value;
+            localStorage.setItem(assignedHalaqa, JSON.stringify(students));
+        }
+
+        function updateStats(students) {
+            var today = new Date().toISOString().split('T')[0];
+            var present = 0, absent = 0, totalProgress = 0;
+            students.forEach(function(s) {
+                if (s.attendance && s.attendance[today]) present++;
+                else absent++;
+                totalProgress += (s.progress || 0);
+            });
+            document.getElementById('statTotal').innerText = students.length;
+            document.getElementById('statPresent').innerText = present;
+            document.getElementById('statAbsent').innerText = absent;
+            document.getElementById('statProgress').innerText = students.length ? Math.round(totalProgress / students.length) + '%' : '0%';
+        }
+
+        loadStudents();
+    </script>
+</body>
+</html>

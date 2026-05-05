@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>إصدار شهادة | المدرسة القرآنية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --deep-green: #0b3b1e; --royal-green: #135c32; --gold: #c9a84c; --gold-pale: #f2e6c9; --sand: #f5ead0; --terracotta: #c17a3e; --cream: #fcf9f2; --text-dark: #1a2e1a; --text-muted: #4a5b4a; --radius-xl: 1.8rem; --radius-lg: 1.3rem; --shadow-gold: 0 20px 40px rgba(201, 168, 76, 0.2); }
+        body { font-family: 'Cairo', sans-serif; background: linear-gradient(180deg, #fdf9f0 0%, #f5ead0 100%); color: var(--text-dark); padding: 20px; max-width: 700px; margin: auto; }
+        h1 { color: var(--deep-green); text-align: center; margin-bottom: 25px; font-size: 2rem; }
+        .selector-card { background: rgba(255,255,255,0.8); backdrop-filter: blur(25px); border-radius: var(--radius-lg); padding: 25px; margin-bottom: 25px; box-shadow: var(--shadow-gold); border: 1px solid rgba(255,255,255,0.6); }
+        select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 10px; font-family: 'Cairo', sans-serif; font-size: 1rem; margin: 10px 0 20px; }
+        .btn-primary { background: var(--royal-green); color: white; border: none; padding: 14px; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer; width: 100%; font-family: 'Cairo', sans-serif; }
+        .btn-primary:hover { background: #0e4624; }
+        .certificate-preview { background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); border: 4px double var(--gold); border-radius: 15px; padding: 40px 30px; text-align: center; position: relative; margin-top: 20px; box-shadow: var(--shadow-gold); }
+        .certificate-preview h2 { font-size: 2rem; color: var(--deep-green); margin: 10px 0; }
+        .certificate-preview .student-name { font-size: 2.5rem; font-weight: 900; color: var(--terracotta); margin: 20px 0; }
+        .certificate-preview table { width: 80%; margin: 20px auto; border-collapse: collapse; }
+        .certificate-preview td { padding: 8px; border-bottom: 1px dashed #ccc; }
+        .certificate-preview .result { font-size: 1.4rem; font-weight: 700; color: var(--royal-green); margin-top: 20px; }
+        .back-link { display: block; text-align: center; margin-top: 25px; color: var(--royal-green); text-decoration: none; font-weight: 700; }
+        @media print { body { background: white; } .selector-card, .back-link, .btn-primary { display: none !important; } .certificate-preview { border: 2px solid #000; box-shadow: none; } }
+    </style>
+</head>
+<body>
+    <h1>🎓 إصدار شهادة التقدير</h1>
+    <div class="selector-card">
+        <p style="font-weight:600;">اختر الطالب:</p>
+        <select id="studentSelect"><option value="">-- اختر طالباً --</option></select>
+        <button class="btn-primary" onclick="generateCertificate()">📜 عرض الشهادة</button>
+    </div>
+    <div id="certificateArea"><p style="color:#999; text-align:center;">اختر طالباً من القائمة.</p></div>
+    <a href="admin.html" class="back-link">⬅ العودة للوحة التحكم</a>
+    <script>
+        const STORAGE_KEY = 'studentGrades';
+        function loadGrades() { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+        function populateStudents() {
+            const grades = loadGrades();
+            const students = [...new Set(grades.map(g => g.student))];
+            const select = document.getElementById('studentSelect');
+            students.forEach(s => { select.innerHTML += `<option value="${s}">${s}</option>`; });
+        }
+        function generateCertificate() {
+            const student = document.getElementById('studentSelect').value;
+            if (!student) return alert('اختر طالباً');
+            const grades = loadGrades().filter(g => g.student === student);
+            if (!grades.length) return alert('لا توجد علامات');
+            const latest = grades[grades.length - 1];
+            const avg = (grades.reduce((sum, g) => sum + g.total, 0) / grades.length).toFixed(1);
+            let appreciation = 'مقبول'; if (avg >= 50) appreciation = 'جيد'; if (avg >= 55) appreciation = 'جيد جداً'; if (avg >= 58) appreciation = 'ممتاز';
+            document.getElementById('certificateArea').innerHTML = `
+            <div class="certificate-preview">
+                <div style="font-size:1.5rem; color:var(--gold);">﷽</div>
+                <h2>المدرسة القرآنية</h2><p>مسجد السلام - قصر توكي</p>
+                <div class="student-name">${student}</div><p>يشهد له بحصوله على:</p>
+                <table><tr><td>📖 الحفظ</td><td>${latest.hifz} / 20</td></tr><tr><td>🎙️ التجويد</td><td>${latest.tajweed} / 20</td></tr><tr><td>📚 المراجعة</td><td>${latest.murajaa} / 20</td></tr><tr><td><strong>المجموع</strong></td><td><strong>${latest.total} / 60</strong></td></tr></table>
+                <div class="result">التقدير: ${appreciation}</div>
+                <p style="margin-top:30px;">مع تمنياتنا بمزيد من التقدم</p>
+                <div style="margin-top:50px; display:flex; justify-content:space-between;"><p>ختم المدرسة: ________</p><p>توقيع المدير: ________</p></div>
+            </div>`;
+        }
+        populateStudents();
+    </script>
+</body>
+</html>

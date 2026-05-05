@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>المتابعة اليومية | المدرسة القرآنية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --deep-green: #0b3b1e; --royal-green: #135c32; --gold: #c9a84c;
+            --gold-pale: #f2e6c9; --sand: #f5ead0; --terracotta: #c17a3e;
+            --cream: #fcf9f2; --text-dark: #1a2e1a; --text-muted: #4a5b4a;
+            --radius-xl: 1.8rem; --radius-lg: 1.3rem; --shadow-gold: 0 20px 40px rgba(201, 168, 76, 0.2);
+        }
+        body {
+            font-family: 'Cairo', sans-serif; background: linear-gradient(180deg, #fdf9f0 0%, #f5ead0 100%);
+            color: var(--text-dark); padding-bottom: 30px; background-attachment: fixed;
+        }
+        .navbar {
+            position: fixed; top: 15px; left: 50%; transform: translateX(-50%);
+            width: 95%; max-width: 700px; background: rgba(10, 30, 18, 0.85);
+            backdrop-filter: blur(25px); border: 1px solid rgba(201, 168, 76, 0.6);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4); border-radius: 60px;
+            padding: 10px 18px; display: flex; justify-content: space-between;
+            align-items: center; z-index: 999; overflow-x: auto; white-space: nowrap;
+        }
+        .navbar .brand { font-size: 1.1rem; font-weight: 800; color: var(--gold-bright); display: flex; align-items: center; gap: 6px; }
+        .navbar .brand i { font-size: 1.5rem; color: var(--gold); }
+        .nav-links a {
+            color: #fff; background: rgba(255,255,255,0.12); padding: 9px 14px; border-radius: 30px;
+            font-size: 0.85rem; margin: 0 2px; text-decoration: none; transition: 0.3s;
+        }
+        .nav-links a:hover { background: var(--gold); color: #0a2a0a; }
+
+        .followup-wrapper { margin-top: 130px; padding: 0 15px; }
+        .followup-container {
+            max-width: 800px; margin: 0 auto 30px;
+            background: rgba(255,255,255,0.8); backdrop-filter: blur(25px);
+            border-radius: var(--radius-xl); padding: 30px 20px;
+            box-shadow: var(--shadow-gold); border: 1px solid rgba(255,255,255,0.6);
+        }
+        h1 { color: var(--deep-green); font-size: 2rem; font-weight: 900; text-align: center; margin-bottom: 25px; }
+        .section { background: rgba(255,255,255,0.7); border-radius: var(--radius-lg); padding: 20px; margin-bottom: 25px; border: 1px solid var(--gold-pale); }
+        .section h2 { color: var(--deep-green); margin-bottom: 15px; font-size: 1.3rem; border-bottom: 2px solid var(--gold-pale); padding-bottom: 10px; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; color: var(--royal-green); }
+        select, input { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 10px; border: 1px solid #ccc; font-family: 'Cairo', sans-serif; font-size: 0.95rem; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 0.9rem; background: white; border-radius: 15px; overflow: hidden; }
+        th { background: var(--deep-green); color: white; padding: 10px; text-align: center; }
+        td { padding: 10px; border-bottom: 1px solid #eee; text-align: center; }
+        .btn {
+            background: var(--royal-green); color: white; border: none; padding: 12px 20px;
+            border-radius: 12px; font-weight: 700; cursor: pointer; font-family: 'Cairo', sans-serif;
+            font-size: 1rem; width: 100%; transition: 0.3s;
+        }
+        .btn:hover { background: #0e4624; }
+        .back-link { display: block; text-align: center; margin-top: 25px; color: var(--royal-green); text-decoration: none; font-weight: 700; }
+        .global-footer { text-align: center; padding: 20px; background: var(--deep-green); color: #ddd; margin-top: 40px; border-top: 3px solid var(--gold); border-radius: 30px 30px 0 0; font-size: 0.85rem; }
+    </style>
+</head>
+<body>
+    <div class="page-content">
+        <nav class="navbar">
+            <div class="brand"><i class="fas fa-mosque"></i> المدرسة القرآنية</div>
+            <div class="nav-links">
+                <a href="index.html"><i class="fas fa-home"></i> الرئيسية</a>
+                <a href="login.html"><i class="fas fa-sign-in-alt"></i> خروج</a>
+            </div>
+        </nav>
+
+        <div class="followup-wrapper">
+            <div class="followup-container">
+                <h1>📋 المتابعة اليومية والغياب</h1>
+
+                <div class="section">
+                    <h2>➕ تسجيل متابعة يوم</h2>
+                    <label>التاريخ:</label><input type="date" id="recordDate">
+                    <label>الحلقة:</label>
+                    <select id="halaqaSelect">
+                        <option value="morningProgress">☀️ صباح</option>
+                        <option value="eveningProgress">🌙 مساء</option>
+                        <option value="tajweedProgress">🎙️ تسميع</option>
+                    </select>
+                    <button class="btn" onclick="loadStudentsForRecord()">تحميل الطلاب</button>
+                    <div id="studentsList" style="margin-top:15px;"></div>
+                    <button class="btn" id="saveRecordBtn" style="display:none;" onclick="saveRecord()">💾 حفظ المتابعة</button>
+                    <p id="recordMsg" style="color:green; margin-top:10px; font-weight:600;"></p>
+                </div>
+
+                <div class="section">
+                    <h2>📊 الحصيلة الشهرية للتكرار</h2>
+                    <label>الشهر:</label><input type="month" id="reportMonth">
+                    <label>الحلقة:</label>
+                    <select id="reportHalaqa">
+                        <option value="morningProgress">☀️ صباح</option>
+                        <option value="eveningProgress">🌙 مساء</option>
+                        <option value="tajweedProgress">🎙️ تسميع</option>
+                    </select>
+                    <button class="btn" onclick="generateMonthlyReport()">عرض الحصيلة</button>
+                    <div id="monthlyReport" style="margin-top:15px;"></div>
+                </div>
+
+                <div class="section">
+                    <h2>📚 المتون العلمية</h2>
+                    <button class="btn" onclick="toggleMutoonSection()">إدارة المتون</button>
+                    <div id="mutoonSection" style="display:none; margin-top:15px;">
+                        <input type="text" id="mutoonName" placeholder="اسم المتن (مثال: تحفة الأطفال)">
+                        <input type="text" id="mutoonDescription" placeholder="وصف المتن">
+                        <button class="btn" onclick="addMutoon()">➕ إضافة متن</button>
+                        <div id="mutoonList" style="margin-top:15px;"></div>
+                    </div>
+                </div>
+
+                <a href="admin.html" class="back-link">⬅ العودة للوحة التحكم</a>
+            </div>
+        </div>
+        <div class="global-footer">
+            <p><i class="fas fa-quran" style="color:var(--gold);"></i> المدرسة القرآنية - مسجد السلام</p>
+            <p>© 2026 | وقفة رقمية لخدمة كتاب الله</p>
+        </div>
+    </div>
+
+    <script>
+        function loadStudentsForRecord() {
+            const halaqa = document.getElementById('halaqaSelect').value;
+            const students = JSON.parse(localStorage.getItem(halaqa)) || [];
+            const container = document.getElementById('studentsList');
+            if (!students.length) {
+                container.innerHTML = '<p style="color:#999;">لا يوجد طلاب في هذه الحلقة.</p>';
+                document.getElementById('saveRecordBtn').style.display = 'none';
+                return;
+            }
+            let html = '<table><tr><th>الطالب</th><th>حاضر</th><th>التكرار</th><th>ملاحظات</th></tr>';
+            students.forEach((s, i) => {
+                const name = [s.surname, s.name].filter(Boolean).join(' ') || 'غير معروف';
+                html += `<tr><td>${name}</td><td><input type="checkbox" id="present_${i}" checked></td><td><input type="number" id="rep_${i}" value="0" min="0" style="width:70px;"></td><td><input type="text" id="notes_${i}" style="width:120px;"></td></tr>`;
+            });
+            html += '</table>';
+            container.innerHTML = html;
+            document.getElementById('saveRecordBtn').style.display = 'block';
+        }
+
+        function saveRecord() {
+            const date = document.getElementById('recordDate').value;
+            if (!date) return alert('اختر التاريخ');
+            const halaqa = document.getElementById('halaqaSelect').value;
+            const students = JSON.parse(localStorage.getItem(halaqa)) || [];
+            const records = JSON.parse(localStorage.getItem('dailyRecords')) || [];
+            const dayRecords = [];
+            students.forEach((s, i) => {
+                const name = [s.surname, s.name].filter(Boolean).join(' ') || 'غير معروف';
+                dayRecords.push({
+                    studentName: name,
+                    present: document.getElementById('present_' + i).checked,
+                    repetitions: parseInt(document.getElementById('rep_' + i).value) || 0,
+                    notes: document.getElementById('notes_' + i).value
+                });
+            });
+            records.push({ date, halaqa, records: dayRecords });
+            localStorage.setItem('dailyRecords', JSON.stringify(records));
+            document.getElementById('recordMsg').innerText = '✅ تم حفظ سجل اليوم بنجاح';
+            document.getElementById('saveRecordBtn').style.display = 'none';
+            document.getElementById('studentsList').innerHTML = '';
+        }
+
+        function generateMonthlyReport() {
+            const month = document.getElementById('reportMonth').value;
+            if (!month) return alert('اختر الشهر');
+            const halaqa = document.getElementById('reportHalaqa').value;
+            const [year, monthNum] = month.split('-');
+            const records = JSON.parse(localStorage.getItem('dailyRecords')) || [];
+            const filtered = records.filter(r => {
+                const d = new Date(r.date);
+                return d.getFullYear() === parseInt(year) && (d.getMonth() + 1) === parseInt(monthNum) && r.halaqa === halaqa;
+            });
+            if (!filtered.length) {
+                document.getElementById('monthlyReport').innerHTML = '<p style="color:#999;">لا توجد سجلات لهذا الشهر.</p>';
+                return;
+            }
+            const stats = {};
+            filtered.forEach(day => {
+                day.records.forEach(r => {
+                    if (!stats[r.studentName]) stats[r.studentName] = { totalReps: 0, present: 0, absent: 0, total: 0 };
+                    stats[r.studentName].totalReps += r.repetitions;
+                    if (r.present) stats[r.studentName].present++;
+                    else stats[r.studentName].absent++;
+                    stats[r.studentName].total++;
+                });
+            });
+            let html = '<table><tr><th>الطالب</th><th>التكرار الكلي</th><th>أيام الحضور</th><th>أيام الغياب</th></tr>';
+            for (const [name, s] of Object.entries(stats)) {
+                html += `<tr><td>${name}</td><td>${s.totalReps}</td><td>${s.present}</td><td>${s.absent}</td></tr>`;
+            }
+            html += '</table>';
+            document.getElementById('monthlyReport').innerHTML = html;
+        }
+
+        function toggleMutoonSection() {
+            const s = document.getElementById('mutoonSection');
+            s.style.display = s.style.display === 'none' ? 'block' : 'none';
+            loadMutoonList();
+        }
+
+        function addMutoon() {
+            const name = document.getElementById('mutoonName').value.trim();
+            const desc = document.getElementById('mutoonDescription').value.trim();
+            if (!name) return alert('أدخل اسم المتن');
+            const mutoon = JSON.parse(localStorage.getItem('mutoonList')) || [];
+            mutoon.push({ name, description: desc });
+            localStorage.setItem('mutoonList', JSON.stringify(mutoon));
+            document.getElementById('mutoonName').value = '';
+            document.getElementById('mutoonDescription').value = '';
+            loadMutoonList();
+        }
+
+        function loadMutoonList() {
+            const mutoon = JSON.parse(localStorage.getItem('mutoonList')) || [];
+            const c = document.getElementById('mutoonList');
+            if (!mutoon.length) { c.innerHTML = '<p style="color:#999;">لا توجد متون مضافة.</p>'; return; }
+            c.innerHTML = '<ul>' + mutoon.map((m, i) => `<li>📖 <strong>${m.name}</strong> ${m.description || ''} <button onclick="deleteMutoon(${i})" style="color:red; border:none; background:none; cursor:pointer;">🗑️</button></li>`).join('') + '</ul>';
+        }
+
+        function deleteMutoon(i) {
+            const m = JSON.parse(localStorage.getItem('mutoonList')) || [];
+            m.splice(i, 1); localStorage.setItem('mutoonList', JSON.stringify(m)); loadMutoonList();
+        }
+    </script>
+</body>
+</html>

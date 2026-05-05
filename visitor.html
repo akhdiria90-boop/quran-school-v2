@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>الأنشطة والمعرض | المدرسة القرآنية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --deep-green: #0b3b1e; --royal-green: #135c32; --gold: #c9a84c;
+            --gold-bright: #e0c97f; --gold-pale: #f2e6c9; --sand: #f5ead0;
+            --terracotta: #c17a3e; --cream: #fcf9f2; --text-dark: #1a2e1a; --text-muted: #4a5b4a;
+            --radius-xl: 1.8rem; --radius-lg: 1.3rem; --shadow-gold: 0 20px 40px rgba(201, 168, 76, 0.2);
+        }
+        body {
+            font-family: 'Cairo', sans-serif; background: linear-gradient(180deg, #fdf9f0 0%, #f5ead0 100%);
+            color: var(--text-dark); padding-bottom: 30px; background-attachment: fixed;
+        }
+        .navbar {
+            position: fixed; top: 15px; left: 50%; transform: translateX(-50%);
+            width: 95%; max-width: 700px; background: rgba(10, 30, 18, 0.85);
+            backdrop-filter: blur(25px); border: 1px solid rgba(201, 168, 76, 0.6);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4); border-radius: 60px;
+            padding: 10px 18px; display: flex; justify-content: space-between;
+            align-items: center; z-index: 999; overflow-x: auto; white-space: nowrap;
+        }
+        .navbar .brand { font-size: 1.1rem; font-weight: 800; color: var(--gold-bright); display: flex; align-items: center; gap: 6px; }
+        .navbar .brand i { font-size: 1.5rem; color: var(--gold); }
+        .nav-links a {
+            color: #fff; background: rgba(255,255,255,0.12); padding: 9px 14px; border-radius: 30px;
+            font-size: 0.85rem; margin: 0 2px; text-decoration: none; transition: 0.3s;
+        }
+        .nav-links a:hover { background: var(--gold); color: #0a2a0a; }
+
+        .visitor-wrapper { margin-top: 130px; padding: 0 15px; }
+        .visitor-container {
+            max-width: 800px; margin: 0 auto 30px;
+            background: rgba(255,255,255,0.8); backdrop-filter: blur(25px);
+            border-radius: var(--radius-xl); padding: 30px 20px;
+            box-shadow: var(--shadow-gold); border: 1px solid rgba(255,255,255,0.6);
+        }
+        h1 { color: var(--deep-green); font-size: 2rem; font-weight: 900; text-align: center; margin-bottom: 30px; }
+
+        .stats-hero { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .stat-hero {
+            background: var(--deep-green); color: white; border-radius: 20px; padding: 25px 15px;
+            text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        .stat-hero .number { font-size: 2rem; font-weight: 900; color: var(--gold-bright); }
+        .stat-hero .label { font-size: 0.85rem; margin-top: 5px; }
+
+        .section-title { color: var(--deep-green); font-size: 1.5rem; font-weight: 800; margin: 25px 0 15px; border-right: 5px solid var(--gold); padding-right: 10px; }
+
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin: 20px 0; }
+        .gallery-item { border-radius: var(--radius-lg); overflow: hidden; border: 2px solid var(--gold); transition: 0.3s; }
+        .gallery-item:hover { transform: scale(1.03); box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
+        .gallery-item img { width: 100%; height: 180px; object-fit: cover; display: block; }
+        .gallery-item iframe { width: 100%; height: 180px; display: block; }
+
+        .announcement-card {
+            background: rgba(255,255,255,0.7); backdrop-filter: blur(10px);
+            border-radius: var(--radius-lg); padding: 20px; margin-bottom: 15px;
+            border-right: 5px solid var(--gold); box-shadow: 0 10px 20px rgba(0,0,0,0.03);
+        }
+        .announcement-card h3 { color: var(--deep-green); margin-bottom: 5px; }
+        .announcement-card p { color: var(--text-muted); }
+        .back-link { display: block; text-align: center; margin-top: 25px; color: var(--royal-green); text-decoration: none; font-weight: 700; }
+        .global-footer { text-align: center; padding: 20px; background: var(--deep-green); color: #ddd; margin-top: 40px; border-top: 3px solid var(--gold); border-radius: 30px 30px 0 0; font-size: 0.85rem; }
+    </style>
+</head>
+<body>
+    <div class="page-content">
+        <nav class="navbar">
+            <div class="brand"><i class="fas fa-mosque"></i> المدرسة القرآنية</div>
+            <div class="nav-links">
+                <a href="index.html"><i class="fas fa-home"></i> الرئيسية</a>
+                <a href="login.html"><i class="fas fa-sign-in-alt"></i> دخول</a>
+                <a href="about.html"><i class="fas fa-info-circle"></i> عنا</a>
+                <a href="contact.html"><i class="fas fa-phone"></i> اتصال</a>
+            </div>
+        </nav>
+
+        <div class="visitor-wrapper">
+            <div class="visitor-container">
+                <h1>👀 منصة الزوار</h1>
+                <div class="stats-hero">
+                    <div class="stat-hero"><div class="number" id="statStudents">0</div><div class="label">🧒 طالب</div></div>
+                    <div class="stat-hero"><div class="number" id="statTeachers">0</div><div class="label">👨‍🏫 أستاذ</div></div>
+                    <div class="stat-hero"><div class="number">3</div><div class="label">🕌 حلقات</div></div>
+                </div>
+
+                <div class="section-title">🖼️ معرض الصور والفيديوهات</div>
+                <div class="gallery-grid" id="liveGallery">
+                    <p style="color:var(--text-muted); grid-column: 1 / -1; text-align: center;">لا توجد وسائط بعد.</p>
+                </div>
+
+                <div class="section-title">📢 آخر الإعلانات</div>
+                <div id="announcementsContainer">
+                    <p style="color:var(--text-muted); text-align: center;">لا توجد إعلانات حالياً.</p>
+                </div>
+
+                <a href="login.html" class="back-link">⬅ العودة لتسجيل الدخول</a>
+            </div>
+        </div>
+        <div class="global-footer">
+            <p><i class="fas fa-quran" style="color:var(--gold);"></i> المدرسة القرآنية - مسجد السلام</p>
+            <p>© 2026 | وقفة رقمية لخدمة كتاب الله</p>
+        </div>
+    </div>
+
+    <script>
+        function updateStats() {
+            var totalStudents = 0;
+            ['morningProgress', 'eveningProgress', 'tajweedProgress'].forEach(k => totalStudents += (JSON.parse(localStorage.getItem(k)) || []).length);
+            var teachers = (JSON.parse(localStorage.getItem('registeredUsers')) || []).filter(u => u.role === 'أستاذ').length;
+            document.getElementById('statStudents').innerText = totalStudents;
+            document.getElementById('statTeachers').innerText = teachers;
+        }
+
+        function loadGallery() {
+            var images = JSON.parse(localStorage.getItem('schoolGalleryImages')) || [];
+            var videos = JSON.parse(localStorage.getItem('schoolGalleryVideos')) || [];
+            var container = document.getElementById('liveGallery');
+            var html = '';
+            if (!images.length && !videos.length) {
+                container.innerHTML = '<p style="color:var(--text-muted); grid-column: 1 / -1; text-align: center;">لا توجد وسائط بعد.</p>';
+                return;
+            }
+            images.forEach(img => { html += '<div class="gallery-item"><img src="' + img + '" alt="صورة"></div>'; });
+            videos.forEach(vid => {
+                var embedUrl = vid.replace("watch?v=", "embed/");
+                html += '<div class="gallery-item"><iframe src="' + embedUrl + '" frameborder="0" allowfullscreen></iframe></div>';
+            });
+            container.innerHTML = html;
+        }
+
+        function loadAnnouncements() {
+            var announcements = JSON.parse(localStorage.getItem('schoolAnnouncements')) || [];
+            var container = document.getElementById('announcementsContainer');
+            if (!announcements.length) return;
+            var html = '';
+            announcements.slice(-3).reverse().forEach(a => {
+                html += '<div class="announcement-card"><h3>📌 ' + a.title + '</h3><p>' + a.body + '</p><small>🕒 ' + a.date + '</small></div>';
+            });
+            container.innerHTML = html;
+        }
+
+        updateStats();
+        loadGallery();
+        loadAnnouncements();
+    </script>
+</body>
+</html>

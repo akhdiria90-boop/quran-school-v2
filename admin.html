@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>لوحة التحكم | المدرسة القرآنية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --deep-green: #0b3b1e; --royal-green: #135c32; --gold: #c9a84c;
+            --gold-bright: #e0c97f; --gold-pale: #f2e6c9; --sand: #f5ead0;
+            --terracotta: #c17a3e; --cream: #fcf9f2; --dark-bg: #0a1f0f;
+            --text-dark: #1a2e1a; --text-muted: #4a5b4a; --border-light: rgba(201, 168, 76, 0.4);
+            --radius-xl: 1.8rem; --radius-lg: 1.3rem; --shadow-gold: 0 15px 30px rgba(201, 168, 76, 0.2);
+        }
+        body {
+            font-family: 'Cairo', sans-serif; background: linear-gradient(180deg, #fdf9f0 0%, #f5ead0 100%);
+            color: var(--text-dark); padding-bottom: 30px; background-attachment: fixed;
+        }
+        .navbar {
+            position: fixed; top: 15px; left: 50%; transform: translateX(-50%);
+            width: 95%; max-width: 700px; background: rgba(10, 30, 18, 0.85);
+            backdrop-filter: blur(20px); border: 1px solid rgba(201, 168, 76, 0.5);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4); border-radius: 60px;
+            padding: 10px 18px; display: flex; justify-content: space-between;
+            align-items: center; z-index: 999; overflow-x: auto; white-space: nowrap;
+        }
+        .navbar .brand { font-size: 1.1rem; font-weight: 800; color: var(--gold-bright); display: flex; align-items: center; gap: 6px; }
+        .navbar .brand img { height: 30px; width: 30px; border-radius: 50%; object-fit: cover; vertical-align: middle; margin-left: 5px; }
+        .nav-links a {
+            color: #fff; background: rgba(255,255,255,0.12); padding: 9px 14px; border-radius: 30px;
+            font-size: 0.85rem; margin: 0 2px; text-decoration: none; transition: 0.3s;
+        }
+        .nav-links a:hover { background: var(--gold); color: #0a2a0a; }
+
+        .admin-wrapper { margin-top: 130px; padding: 0 15px; }
+        .admin-container {
+            max-width: 800px; margin: 0 auto 30px;
+            background: rgba(255,255,255,0.8); backdrop-filter: blur(25px);
+            border-radius: var(--radius-xl); padding: 30px 20px;
+            box-shadow: var(--shadow-gold); border: 1px solid rgba(255,255,255,0.6);
+        }
+        h1 { color: var(--deep-green); font-size: 2rem; font-weight: 900; text-align: center; }
+        .subtitle { text-align: center; color: var(--royal-green); margin-bottom: 30px; }
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 15px; margin: 25px 0; }
+        .stat-box {
+            background: rgba(255,255,255,0.7); backdrop-filter: blur(10px);
+            border-radius: 20px; padding: 20px 10px; text-align: center;
+            border-bottom: 4px solid var(--gold); box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+        .stat-box .number { font-size: 2.2rem; font-weight: 900; color: var(--deep-green); }
+        .stat-box .label { color: var(--text-muted); font-size: 0.85rem; font-weight: 600; }
+
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px; margin: 30px 0; }
+        .dash-card {
+            background: linear-gradient(135deg, var(--royal-green), #0e4624);
+            color: white; padding: 25px 15px; border-radius: var(--radius-lg);
+            text-align: center; cursor: pointer; text-decoration: none;
+            transition: all 0.3s ease; border: 1px solid transparent;
+            display: flex; flex-direction: column; align-items: center; gap: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .dash-card:hover { background: linear-gradient(135deg, #1a5e34, #0a3b1e); transform: translateY(-5px); border-color: var(--gold); }
+        .dash-card i { font-size: 2.5rem; color: var(--gold); }
+        .dash-card span { font-weight: 700; font-size: 1rem; }
+
+        .hidden-section {
+            display: none; background: rgba(255,255,255,0.9); backdrop-filter: blur(30px);
+            border-radius: var(--radius-lg); padding: 25px 20px; margin-top: 30px;
+            text-align: right; border: 1px solid var(--border-light); box-shadow: var(--shadow-gold);
+        }
+        .hidden-section h3 { color: var(--deep-green); font-size: 1.4rem; margin-bottom: 20px; border-bottom: 2px solid var(--gold); padding-bottom: 10px; }
+        .tab-header { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab-btn { background: #f0f0f0; border: none; padding: 10px 20px; border-radius: 25px; font-weight: 600; cursor: pointer; font-family: 'Cairo'; }
+        .tab-btn.active { background: var(--deep-green); color: white; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; background: white; border-radius: 15px; overflow: hidden; }
+        th { background: var(--deep-green); color: white; padding: 12px; font-size: 0.85rem; }
+        td { padding: 10px; border-bottom: 1px solid #eee; font-size: 0.85rem; text-align: center; }
+        .btn-approve, .btn-reject { border: none; padding: 6px 15px; border-radius: 15px; cursor: pointer; font-weight: 700; font-size: 0.8rem; margin: 2px; }
+        .btn-approve { background: var(--royal-green); color: white; }
+        .btn-reject { background: #c0392b; color: white; }
+        input, select, textarea { width: 100%; padding: 12px; margin: 10px 0 15px; border-radius: 12px; border: 1px solid #ccc; font-family: 'Cairo', sans-serif; font-size: 0.95rem; }
+        .btn-save { background: linear-gradient(135deg, var(--gold), #b8933c); color: #0a2a0a; border: none; padding: 14px; border-radius: 30px; font-weight: 800; cursor: pointer; width: 100%; font-family: 'Cairo', sans-serif; font-size: 1rem; }
+        .global-footer { text-align: center; padding: 20px; background: var(--dark-bg); color: #ddd; margin-top: 40px; border-top: 3px solid var(--gold); border-radius: 30px 30px 0 0; font-size: 0.85rem; }
+        .switch { position: relative; display: inline-block; width: 60px; height: 34px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; }
+        .slider:before { position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: .4s; }
+        input:checked + .slider { background-color: var(--royal-green); }
+        input:checked + .slider:before { transform: translateX(26px); }
+        .slider.round { border-radius: 34px; }
+        .slider.round:before { border-radius: 50%; }
+    </style>
+</head>
+<body>
+    <div class="page-content">
+        <nav class="navbar">
+            <div class="brand"><img src="myphoto.png" alt="شعار"> المدرسة القرآنية</div>
+            <div class="nav-links">
+                <a href="index.html"><i class="fas fa-home"></i> الرئيسية</a>
+                <a href="login.html"><i class="fas fa-sign-in-alt"></i> دخول</a>
+                <a href="visitor.html"><i class="fas fa-bullhorn"></i> أنشطة</a>
+                <a href="about.html"><i class="fas fa-info-circle"></i> عنا</a>
+                <a href="contact.html"><i class="fas fa-phone"></i> اتصال</a>
+            </div>
+        </nav>
+        <div class="admin-wrapper">
+            <div class="admin-container">
+                <div style="text-align:center; font-size:3.5rem; margin-bottom:5px;">🏫</div>
+                <h1>لوحة تحكم المدير</h1>
+                <p class="subtitle">المدرسة القرآنية - مسجد السلام <span id="demoBadge" style="display:none; background: var(--gold); color: #0a2a0a; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; margin-right: 10px;">وضع تجريبي</span></p>
+                <div class="stats">
+                    <div class="stat-box"><div class="number" id="statStudents">0</div><div class="label">🧒 طالب</div></div>
+                    <div class="stat-box"><div class="number" id="statTeachers">0</div><div class="label">👨‍🏫 أستاذ</div></div>
+                    <div class="stat-box"><div class="number">3</div><div class="label">🕌 حلقات</div></div>
+                    <div class="stat-box"><div class="number" id="statRequests">0</div><div class="label">📨 طلبات</div></div>
+                </div>
+                <div class="dashboard-grid">
+                    <div class="dash-card" onclick="toggleSection('requestsSection')"><i class="fas fa-envelope-open-text"></i><span>الطلبات</span></div>
+                    <div class="dash-card" onclick="toggleSection('teachersLogSection')"><i class="fas fa-chalkboard-teacher"></i><span>الأساتذة</span></div>
+                    <div class="dash-card" onclick="toggleSection('manageHalaqatSection')"><i class="fas fa-mosque"></i><span>الحلقات</span></div>
+                    <a href="students.html" class="dash-card"><i class="fas fa-user-graduate"></i><span>الطلاب</span></a>
+                    <a href="grades.html" class="dash-card"><i class="fas fa-star"></i><span>العلامات</span></a>
+                    <a href="reports.html" class="dash-card"><i class="fas fa-table"></i><span>كشف النقاط</span></a>
+                    <a href="certificate.html" class="dash-card"><i class="fas fa-certificate"></i><span>شهادات</span></a>
+                    <a href="lists.html" class="dash-card"><i class="fas fa-list-alt"></i><span>القوائم</span></a>
+                    <a href="followup.html" class="dash-card"><i class="fas fa-calendar-check"></i><span>المتابعة</span></a>
+                    <div class="dash-card" onclick="toggleSection('gallerySection')"><i class="fas fa-images"></i><span>المعرض</span></div>
+                    <div class="dash-card" onclick="toggleSection('announceSection')"><i class="fas fa-bullhorn"></i><span>إعلان</span></div>
+                    <div class="dash-card" onclick="toggleSection('registrationSettingsSection')"><i class="fas fa-door-open"></i><span>التسجيل</span></div>
+                    <div class="dash-card" onclick="toggleSection('contactSettingsSection')"><i class="fas fa-sliders-h"></i><span>التواصل</span></div>
+                    <div class="dash-card" onclick="toggleSection('profileSection')"><i class="fas fa-user-circle"></i><span>ملفي</span></div>
+                    <div class="dash-card" onclick="toggleSection('toolsSection')"><i class="fas fa-toolbox"></i><span>تقارير</span></div>
+                    <div class="dash-card" onclick="toggleSection('advancedToolsSection')"><i class="fas fa-database"></i><span>نسخ احتياطي</span></div>
+                </div>
+                <div id="requestsSection" class="hidden-section">
+                    <h3>📨 طلبات التسجيل</h3>
+                    <div class="tab-header">
+                        <button class="tab-btn active" onclick="switchRequestsTab('teachers')">أساتذة <span id="teacherReqCount">0</span></button>
+                        <button class="tab-btn" onclick="switchRequestsTab('parents')">أولياء <span id="parentReqCount">0</span></button>
+                    </div>
+                    <div id="teacherRequestsContainer"></div>
+                    <div id="parentRequestsContainer" style="display:none;"></div>
+                </div>
+                <div id="teachersLogSection" class="hidden-section">
+                    <h3>👨‍🏫 سجل الأساتذة</h3>
+                    <input type="text" id="newTeacherName" placeholder="الاسم الكامل">
+                    <input type="text" id="newTeacherUsername" placeholder="اسم مستخدم (اختياري)">
+                    <input type="password" id="newTeacherPassword" placeholder="كلمة مرور (اختياري)">
+                    <select id="newTeacherHalaqa"><option value="morningProgress">☀️ صباح</option><option value="eveningProgress">🌙 مساء</option><option value="tajweedProgress">🎙️ تسميع</option></select>
+                    <button class="btn-save" onclick="addTeacherDirect()">إنشاء حساب الأستاذ</button>
+                    <div id="teachersLogTable" style="margin-top:20px;"></div>
+                </div>
+                <div id="manageHalaqatSection" class="hidden-section">
+                    <h3>🕌 إدارة الحلقات</h3>
+                    <input type="text" id="newStudentName" placeholder="اللقب والاسم">
+                    <select id="newStudentHalaqa"><option value="morningProgress">☀️ صباح</option><option value="eveningProgress">🌙 مساء</option><option value="tajweedProgress">🎙️ تسميع</option></select>
+                    <button class="btn-save" onclick="addStudentDirect()">أضف طالباً</button>
+                    <p id="addStudentMsg" style="color:green; margin-top:10px;"></p>
+                </div>
+                <div id="gallerySection" class="hidden-section">
+                    <h3>🖼️ المعرض</h3>
+                    <input type="text" id="imageUrl" placeholder="رابط الصورة"><button class="btn-save" onclick="addImage()">أضف صورة</button>
+                    <input type="text" id="videoUrl" placeholder="رابط الفيديو" style="margin-top:15px;"><button class="btn-save" onclick="addVideo()">أضف فيديو</button>
+                    <div id="galleryPreview" style="display:flex; gap:10px; margin-top:20px;"></div>
+                </div>
+                <div id="announceSection" class="hidden-section">
+                    <h3>📢 إعلان جديد</h3>
+                    <input type="text" id="annTitle" placeholder="عنوان"><textarea id="annBody" rows="3" placeholder="نص الإعلان"></textarea>
+                    <button class="btn-save" onclick="publishAnnouncement()">نشر</button><p id="publishMsg" style="color:green;"></p>
+                </div>
+                <div id="registrationSettingsSection" class="hidden-section">
+                    <h3>🚪 إعدادات التسجيل</h3>
+                    <div style="display:flex; align-items:center; justify-content:space-between; background:#f9f7f0; padding:20px; border-radius:15px;">
+                        <span style="font-weight:700;">فتح باب التسجيل</span>
+                        <label class="switch"><input type="checkbox" id="registrationToggle" onchange="toggleRegistration()"><span class="slider round"></span></label>
+                    </div>
+                    <p id="regStatusMsg" style="text-align:center; margin-top:15px; font-weight:600;"></p>
+                </div>
+                <div id="contactSettingsSection" class="hidden-section">
+                    <h3>⚙️ إعدادات التواصل</h3>
+                    <input type="text" id="settingsPhone" placeholder="الهاتف"><input type="text" id="settingsAddress" placeholder="العنوان"><input type="text" id="settingsFacebook" placeholder="رابط فيسبوك">
+                    <button class="btn-save" onclick="saveContactSettings()">حفظ</button><p id="contactSettingsMsg" style="color:green;"></p>
+                </div>
+                <div id="profileSection" class="hidden-section">
+                    <h3>👤 بياناتي</h3>
+                    <input type="text" id="adminSurname" placeholder="اللقب"><input type="text" id="adminName" placeholder="الاسم"><input type="text" id="adminUsername" placeholder="اسم المستخدم"><input type="password" id="adminPassword" placeholder="كلمة مرور جديدة">
+                    <button class="btn-save" onclick="saveAdminProfile()">حفظ</button>
+                    <button class="btn-save" style="margin-top:10px;" onclick="printAdminProfile()">طباعة البطاقة</button>
+                    <p id="adminProfileMsg" style="color:green;"></p>
+                </div>
+                <div id="toolsSection" class="hidden-section"><h3>📊 التقارير</h3><button class="btn-save" onclick="window.print()">طباعة الصفحة الحالية</button></div>
+                <div id="advancedToolsSection" class="hidden-section">
+                    <h3>💾 نسخ احتياطي</h3>
+                    <button class="btn-save" onclick="exportAllData()">تصدير البيانات</button>
+                    <input type="file" id="importFileInput" accept=".json" style="display:none;" onchange="importAllData(event)">
+                    <button class="btn-save" style="margin-top:10px;" onclick="document.getElementById('importFileInput').click()">استيراد البيانات</button>
+                    <p id="importMsg" style="color:green;"></p>
+                </div>
+            </div>
+        </div>
+        <div class="global-footer">
+            <p><i class="fas fa-quran" style="color:var(--gold);"></i> المدرسة القرآنية - مسجد السلام</p>
+            <p>© 2026 | صممها اخضيري 🚀 | <a href="privacy.html">سياسة الخصوصية</a></p>
+        </div>
+    </div>
+    <script>
+        // ========== وضع التجربة ==========
+        if (window.location.search.includes('demo=true')) {
+            document.getElementById('demoBadge').style.display = 'inline';
+            localStorage.setItem('currentUser', JSON.stringify({ surname: 'مدير', name: 'تجريبي', username: 'admin', role: 'مدير' }));
+            localStorage.setItem('registeredUsers', JSON.stringify([
+                { surname: 'عمر', name: 'بن الخطاب', username: 'omar', password: '123', role: 'أستاذ', assignedHalaqa: 'morningProgress' },
+                { surname: 'خديجة', name: 'بنت خويلد', username: 'khadija', password: '123', role: 'أستاذ', assignedHalaqa: 'eveningProgress' }
+            ]));
+            localStorage.setItem('morningProgress', JSON.stringify([
+                { surname: 'أحمد', name: 'علي', age: '10', gender: 'ذكر', year: 'السنة الأولى', parentName: 'علي محمد', phone: '0770000001', progress: 75, repetitions: 12, notes: 'ممتاز في التجويد' },
+                { surname: 'فاطمة', name: 'حسن', age: '8', gender: 'أنثى', year: 'تحضيري', parentName: 'حسن عمر', phone: '0770000002', progress: 40, repetitions: 8, notes: 'تحتاج مراجعة' }
+            ]));
+            localStorage.setItem('eveningProgress', JSON.stringify([
+                { surname: 'محمد', name: 'إبراهيم', age: '12', gender: 'ذكر', year: 'السنة الثالثة', parentName: 'إبراهيم خليل', phone: '0770000003', progress: 90, repetitions: 20, notes: 'قريب من الختم' }
+            ]));
+            localStorage.setItem('tajweedProgress', JSON.stringify([
+                { surname: 'عائشة', name: 'عمر', age: '9', gender: 'أنثى', year: 'السنة الثانية', parentName: 'عمر أحمد', phone: '0770000004', progress: 60, repetitions: 15, notes: '' }
+            ]));
+            localStorage.setItem('schoolAnnouncements', JSON.stringify([
+                { title: 'فتح باب التسجيل', body: 'التسجيل مفتوح للموسم القرآني الجديد.', date: '01/05/2026' },
+                { title: 'مسابقة القرآن الكريم', body: 'ستقام المسابقة السنوية يوم 15 ماي.', date: '05/05/2026' }
+            ]));
+            localStorage.setItem('studentGrades', JSON.stringify([
+                { student: 'أحمد علي', hifz: 18, tajweed: 16, murajaa: 17, total: 51, date: '01/05/2026' },
+                { student: 'فاطمة حسن', hifz: 12, tajweed: 14, murajaa: 10, total: 36, date: '01/05/2026' }
+            ]));
+        }
+
+        function updateAllStats() {
+            var totalStudents = 0;
+            ['morningProgress', 'eveningProgress', 'tajweedProgress'].forEach(k => totalStudents += (JSON.parse(localStorage.getItem(k)) || []).length);
+            var teachers = (JSON.parse(localStorage.getItem('registeredUsers')) || []).filter(u => u.role === 'أستاذ').length;
+            var requests = (JSON.parse(localStorage.getItem('registrationRequests')) || []).length;
+            document.getElementById('statStudents').textContent = totalStudents;
+            document.getElementById('statTeachers').textContent = teachers;
+            document.getElementById('statRequests').textContent = requests;
+        }
+        function toggleSection(id) {
+            document.querySelectorAll('.hidden-section').forEach(s => s.style.display = 'none');
+            var sec = document.getElementById(id);
+            if (sec) {
+                sec.style.display = 'block';
+                if (id === 'requestsSection') loadAllRequests();
+                if (id === 'teachersLogSection') loadTeachersLog();
+                if (id === 'gallerySection') loadGalleryPreview();
+                if (id === 'registrationSettingsSection') loadRegistrationSettings();
+                if (id === 'contactSettingsSection') loadContactSettingsForm();
+                if (id === 'profileSection') loadAdminProfile();
+            }
+            updateAllStats();
+        }
+        function switchRequestsTab(type) {
+            document.getElementById('teacherRequestsContainer').style.display = type === 'teachers' ? 'block' : 'none';
+            document.getElementById('parentRequestsContainer').style.display = type === 'parents' ? 'block' : 'none';
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector(`.tab-btn:nth-child(${type === 'teachers' ? '1' : '2'})`).classList.add('active');
+        }
+        function loadAllRequests() {
+            var requests = JSON.parse(localStorage.getItem('registrationRequests')) || [];
+            var teacherReqs = requests.filter(r => r.type === 'platform' && r.role === 'أستاذ');
+            var parentReqs = requests.filter(r => r.type === 'platform' && r.role !== 'أستاذ' || !r.type);
+            var studentReqs = requests.filter(r => r.halaqa);
+            document.getElementById('teacherReqCount').innerText = teacherReqs.length;
+            document.getElementById('parentReqCount').innerText = parentReqs.length + studentReqs.length;
+            document.getElementById('teacherRequestsContainer').innerHTML = renderRequestTable(teacherReqs);
+            document.getElementById('parentRequestsContainer').innerHTML = renderRequestTable(parentReqs.concat(studentReqs));
+        }
+        function renderRequestTable(requests) {
+            if (!requests.length) return '<p style="color:#999; text-align:center; padding:20px;">لا توجد طلبات.</p>';
+            var html = '<table><tr><th>الاسم</th><th>المستخدم</th><th>الهاتف</th><th>التاريخ</th><th>إجراء</th></tr>';
+            requests.forEach((r, i) => {
+                html += `<tr><td>${r.surname} ${r.name} ${r.halaqa ? '(للحلقة)' : ''}</td><td>${r.username || '-'}</td><td>${r.phone || '-'}</td><td>${r.date || '-'}</td><td><button onclick="approveRequest(${i})" class="btn-approve">✅</button> <button onclick="deleteRequest(${i})" class="btn-reject">❌</button></td></tr>`;
+            });
+            return html + '</table>';
+        }
+        function approveRequest(index) {
+            var requests = JSON.parse(localStorage.getItem('registrationRequests')) || [];
+            var r = requests[index];
+            if (r.type === 'platform') {
+                var users = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+                users.push({ surname: r.surname, name: r.name, username: r.username, email: r.email, phone: r.phone, password: r.password, role: r.role });
+                localStorage.setItem('registeredUsers', JSON.stringify(users));
+            } else if (r.halaqa) {
+                var students = JSON.parse(localStorage.getItem(r.halaqa)) || [];
+                students.push({ surname: r.surname, name: r.name, age: r.age, year: r.year, parentName: r.parentName, phone: r.phone, progress: 0 });
+                localStorage.setItem(r.halaqa, JSON.stringify(students));
+            }
+            requests.splice(index, 1);
+            localStorage.setItem('registrationRequests', JSON.stringify(requests));
+            loadAllRequests(); updateAllStats();
+        }
+        function deleteRequest(index) {
+            var requests = JSON.parse(localStorage.getItem('registrationRequests')) || [];
+            requests.splice(index, 1);
+            localStorage.setItem('registrationRequests', JSON.stringify(requests));
+            loadAllRequests(); updateAllStats();
+        }
+        function addTeacherDirect() {
+            var name = document.getElementById('newTeacherName').value.trim();
+            var username = document.getElementById('newTeacherUsername').value.trim();
+            var password = document.getElementById('newTeacherPassword').value.trim();
+            var halaqa = document.getElementById('newTeacherHalaqa').value;
+            if (!name) { alert('أدخل الاسم'); return; }
+            var users = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+            var parts = name.split(' ');
+            users.push({
+                surname: parts[0] || '', name: parts.slice(1).join(' ') || name,
+                username: username || parts[0].toLowerCase() + '_' + Math.random().toString(36).substr(2,5),
+                password: password || Math.random().toString(36).substr(2,10) + 'Qr!',
+                role: 'أستاذ', assignedHalaqa: halaqa
+            });
+            localStorage.setItem('registeredUsers', JSON.stringify(users));
+            document.getElementById('newTeacherName').value = '';
+            document.getElementById('newTeacherUsername').value = '';
+            document.getElementById('newTeacherPassword').value = '';
+            loadTeachersLog(); updateAllStats();
+        }
+        function loadTeachersLog() {
+            var teachers = (JSON.parse(localStorage.getItem('registeredUsers')) || []).filter(u => u.role === 'أستاذ');
+            var container = document.getElementById('teachersLogTable');
+            if (!teachers.length) { container.innerHTML = '<p style="color:#999;">لا يوجد أساتذة.</p>'; return; }
+            var html = '<table><tr><th>الاسم</th><th>اسم المستخدم</th><th>كلمة المرور</th><th>الحلقة</th></tr>';
+            teachers.forEach(t => {
+                var halaqaName = t.assignedHalaqa === 'morningProgress' ? '☀️ صباح' : t.assignedHalaqa === 'eveningProgress' ? '🌙 مساء' : '🎙️ تسميع';
+                html += `<tr><td>${t.surname} ${t.name}</td><td>${t.username || '-'}</td><td>${t.password || '***'}</td><td>${halaqaName}</td></tr>`;
+            });
+            html += '</table>';
+            container.innerHTML = html;
+        }
+        function addStudentDirect() {
+            var name = document.getElementById('newStudentName').value.trim();
+            var halaqa = document.getElementById('newStudentHalaqa').value;
+            if (!name) return;
+            var students = JSON.parse(localStorage.getItem(halaqa)) || [];
+            students.push({ surname: name.split(' ')[0] || '', name: name.split(' ').slice(1).join(' ') || name, progress: 0 });
+            localStorage.setItem(halaqa, JSON.stringify(students));
+            document.getElementById('addStudentMsg').innerText = '✅ تمت إضافة: ' + name;
+            document.getElementById('newStudentName').value = '';
+            updateAllStats();
+        }
+        function addImage() { var url = document.getElementById('imageUrl').value.trim(); if (!url) return; var images = JSON.parse(localStorage.getItem('schoolGalleryImages')) || []; images.push(url); localStorage.setItem('schoolGalleryImages', JSON.stringify(images)); document.getElementById('imageUrl').value = ''; loadGalleryPreview(); }
+        function addVideo() { var url = document.getElementById('videoUrl').value.trim(); if (!url) return; var videos = JSON.parse(localStorage.getItem('schoolGalleryVideos')) || []; videos.push(url); localStorage.setItem('schoolGalleryVideos', JSON.stringify(videos)); document.getElementById('videoUrl').value = ''; loadGalleryPreview(); }
+        function loadGalleryPreview() { var images = JSON.parse(localStorage.getItem('schoolGalleryImages')) || []; var container = document.getElementById('galleryPreview'); var html = ''; images.forEach((img, i) => { html += `<div style="position:relative;"><img src="${img}" width="80"><button onclick="deleteMedia('image',${i})" style="position:absolute; top:-5px; right:-5px; background:red; color:white; border:none; border-radius:50%; width:20px; height:20px; cursor:pointer;">✕</button></div>`; }); container.innerHTML = html || '<p style="color:#999;">المعرض فارغ.</p>'; }
+        function deleteMedia(type, index) { var key = type === 'image' ? 'schoolGalleryImages' : 'schoolGalleryVideos'; var items = JSON.parse(localStorage.getItem(key)) || []; items.splice(index, 1); localStorage.setItem(key, JSON.stringify(items)); loadGalleryPreview(); }
+        function publishAnnouncement() { var t = document.getElementById('annTitle').value.trim(), b = document.getElementById('annBody').value.trim(); if (!t || !b) return; var announcements = JSON.parse(localStorage.getItem('schoolAnnouncements')) || []; announcements.push({ title: t, body: b, date: new Date().toLocaleDateString('ar-DZ') }); localStorage.setItem('schoolAnnouncements', JSON.stringify(announcements)); document.getElementById('annTitle').value = ''; document.getElementById('annBody').value = ''; document.getElementById('publishMsg').innerText = '✅ تم النشر'; }
+        function loadRegistrationSettings() { var isOpen = localStorage.getItem('registrationOpen'); document.getElementById('registrationToggle').checked = isOpen === null ? true : JSON.parse(isOpen); updateRegStatusMsg(); }
+        function toggleRegistration() { localStorage.setItem('registrationOpen', JSON.stringify(document.getElementById('registrationToggle').checked)); updateRegStatusMsg(); }
+        function updateRegStatusMsg() { var msg = document.getElementById('regStatusMsg'); if (msg) msg.innerText = document.getElementById('registrationToggle').checked ? '✅ التسجيل مفتوح.' : '⛔ التسجيل مغلق.'; }
+        function loadContactSettingsForm() { var s = JSON.parse(localStorage.getItem('schoolContactSettings')) || {}; document.getElementById('settingsPhone').value = s.phone || ''; document.getElementById('settingsAddress').value = s.address || ''; document.getElementById('settingsFacebook').value = s.facebook || ''; }
+        function saveContactSettings() { var s = { phone: document.getElementById('settingsPhone').value.trim(), address: document.getElementById('settingsAddress').value.trim(), facebook: document.getElementById('settingsFacebook').value.trim() }; localStorage.setItem('schoolContactSettings', JSON.stringify(s)); document.getElementById('contactSettingsMsg').innerText = '✅ تم الحفظ'; }
+        function loadAdminProfile() { var a = JSON.parse(localStorage.getItem('adminProfile')) || {}; document.getElementById('adminSurname').value = a.surname || ''; document.getElementById('adminName').value = a.name || ''; document.getElementById('adminUsername').value = a.username || 'admin'; }
+        function saveAdminProfile() { var a = { surname: document.getElementById('adminSurname').value.trim(), name: document.getElementById('adminName').value.trim(), username: document.getElementById('adminUsername').value.trim() }; localStorage.setItem('adminProfile', JSON.stringify(a)); document.getElementById('adminProfileMsg').innerText = '✅ تم الحفظ'; var newPass = document.getElementById('adminPassword').value.trim(); if (newPass) localStorage.setItem('adminPasswordHint', newPass); }
+        function printAdminProfile() { var a = JSON.parse(localStorage.getItem('adminProfile')) || {}; var w = window.open('', '_blank', 'width=400,height=300'); w.document.write(`<html dir="rtl"><head><style>body{font-family:Cairo;text-align:center;padding:20px;}</style></head><body><h2>بطاقة المدير</h2><p>${a.surname} ${a.name}</p><p>👤 ${a.username}</p><button onclick="window.print()">طباعة</button></body></html>`); w.document.close(); }
+        function exportAllData() { var data = { registeredUsers: JSON.parse(localStorage.getItem('registeredUsers')) || [], registrationRequests: JSON.parse(localStorage.getItem('registrationRequests')) || [], morningProgress: JSON.parse(localStorage.getItem('morningProgress')) || [], eveningProgress: JSON.parse(localStorage.getItem('eveningProgress')) || [], tajweedProgress: JSON.parse(localStorage.getItem('tajweedProgress')) || [], schoolAnnouncements: JSON.parse(localStorage.getItem('schoolAnnouncements')) || [], schoolGalleryImages: JSON.parse(localStorage.getItem('schoolGalleryImages')) || [], schoolGalleryVideos: JSON.parse(localStorage.getItem('schoolGalleryVideos')) || [], schoolContactSettings: JSON.parse(localStorage.getItem('schoolContactSettings')) || {}, adminProfile: JSON.parse(localStorage.getItem('adminProfile')) || {}, registrationOpen: localStorage.getItem('registrationOpen') }; var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }); var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'madrasa_backup_' + new Date().toISOString().slice(0,10) + '.json'; a.click(); }
+        function importAllData(event) { var file = event.target.files[0]; if (!file) return; var reader = new FileReader(); reader.onload = function(e) { try { var data = JSON.parse(e.target.result); if (!confirm('⚠️ استبدال جميع البيانات؟')) return; localStorage.setItem('registeredUsers', JSON.stringify(data.registeredUsers || [])); localStorage.setItem('registrationRequests', JSON.stringify(data.registrationRequests || [])); localStorage.setItem('morningProgress', JSON.stringify(data.morningProgress || [])); localStorage.setItem('eveningProgress', JSON.stringify(data.eveningProgress || [])); localStorage.setItem('tajweedProgress', JSON.stringify(data.tajweedProgress || [])); localStorage.setItem('schoolAnnouncements', JSON.stringify(data.schoolAnnouncements || [])); localStorage.setItem('schoolGalleryImages', JSON.stringify(data.schoolGalleryImages || [])); localStorage.setItem('schoolGalleryVideos', JSON.stringify(data.schoolGalleryVideos || [])); localStorage.setItem('schoolContactSettings', JSON.stringify(data.schoolContactSettings || {})); localStorage.setItem('adminProfile', JSON.stringify(data.adminProfile || {})); localStorage.setItem('registrationOpen', data.registrationOpen || null); document.getElementById('importMsg').innerText = '✅ تم الاستيراد'; updateAllStats(); } catch (err) { alert('❌ ملف غير صالح'); } }; reader.readAsText(file); }
+        updateAllStats();
+    </script>
+</body>
+</html>
